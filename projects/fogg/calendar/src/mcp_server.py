@@ -214,6 +214,30 @@ async def list_tools() -> list[Tool]:
                 "required": ["calendar_id"],
             },
         ),
+        Tool(
+            name="get_free_busy",
+            description="Get free/busy information for calendars",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "calendar_id": {"type": "string", "description": "Calendar ID"},
+                    "emails": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "List of email addresses to check",
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "description": "Start time in ISO format",
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "description": "End time in ISO format",
+                    },
+                },
+                "required": ["calendar_id", "emails", "start_time", "end_time"],
+            },
+        ),
     ]
 
 
@@ -335,23 +359,68 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
             return response
 
-        elif name == "sync_group":
-            args = SyncGroupArgs(**arguments)
-
-            # Share calendar with group
+        elif name == "share_calendar":
+            args = ShareCalendarArgs(**arguments)
+            
             success = await asyncio.to_thread(
-                share_calendar_with_group, args.calendar_id, args.group_email
+                share_calendar_with_group, args.calendar_id, args.group_email, args.role
             )
-
-            # Get group members
-            members = await asyncio.to_thread(list_group_members, args.group_email)
-            member_emails = [m.email for m in members]
-
+            
             result = {
-                "calendar_shared": success,
+                "success": success,
+                "calendar_id": args.calendar_id,
                 "group_email": args.group_email,
-                "member_count": len(member_emails),
-                "members": member_emails,
+                "role": args.role,
+            }
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
+
+        elif name == "get_group_members":
+            args = GetGroupMembersArgs(**arguments)
+            
+            members = await asyncio.to_thread(list_group_members, args.group_email)
+            member_list = [{"email": m.email, "role": m.role, "type": m.type} for m in members]
+            
+            result = {
+                "group_email": args.group_email,
+                "member_count": len(member_list),
+                "members": member_list,
+            }
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
+
+        elif name == "update_event_attendees":
+            args = UpdateEventAttendeesArgs(**arguments)
+            from src.calendar_manager import update_event_attendees
+            
+            success = await asyncio.to_thread(
+                update_event_attendees,
+                args.calendar_id,
+                args.event_id,
+                args.attendee_emails,
+            )
+            
+            result = {
+                "success": success,
+                "calendar_id": args.calendar_id,
+                "event_id": args.event_id,
+                "attendee_count": len(args.attendee_emails),
             }
             response = [TextContent(type="text", text=json.dumps(result, indent=2))]
             
@@ -388,6 +457,33 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 },
             }
             response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
+
+        elif name == "get_free_busy":
+            args = GetFreeBusyArgs(**arguments)
+            from dateutil import parser
+            from src.calendar_free_busy import get_free_busy
+            
+            time_min = parser.parse(args.start_time)
+            time_max = parser.parse(args.end_time)
+            
+            freebusy_data = await asyncio.to_thread(
+                get_free_busy,
+                args.calendar_id,
+                args.emails,
+                time_min,
+                time_max,
+            )
+            
+            response = [TextContent(type="text", text=json.dumps(freebusy_data, indent=2))]
             
             # Record success and return
             duration_ms = (time.time() - start_time) * 1000
