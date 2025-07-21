@@ -20,11 +20,11 @@ export function middleware(request: NextRequest) {
     const windowStart = now - RATE_LIMIT.windowMs;
 
     // Clean up old entries
-    for (const [key, value] of rateLimit.entries()) {
+    rateLimit.forEach((value, key) => {
       if (value.resetTime < windowStart) {
         rateLimit.delete(key);
       }
-    }
+    });
 
     // Check rate limit
     const limitKey = `${ip}:${request.nextUrl.pathname}`;
@@ -70,5 +70,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/app/v2/:path*', '/app/v3/:path*'],
+  matcher: ['/app/v2/:path*', '/app/v3/:path*', '/app/v4/:path*'],
 };

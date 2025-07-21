@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     
     const { text } = await generateText({
       model: anthropic('claude-sonnet-4-20250514'),
-      experimental_extendThinking: { budgetTokens: 2_000_000 },
       maxTokens: 400_000,
       system: 'Return JSON {title, description, thinking}',
       prompt: `Generate SEO tags for Candlefish AI in ${industry}`,
