@@ -60,3 +60,7 @@ pids/
 .tmp/
 tmp/
 temp/
+node_modules/
+.env.local
+.env.prod
+**/.env*
