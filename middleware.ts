@@ -70,5 +70,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/app/v2/:path*',
+  matcher: ['/app/v2/:path*', '/app/v3/:path*'],
 };

@@ -2,11 +2,17 @@
   "functions": {
     "app/v2/api/generate-meta/route.ts": {
       "maxDuration": 300
+    },
+    "app/v3/api/generate-meta/route.ts": {
+      "maxDuration": 300
+    },
+    "app/v3/api/chat/route.ts": {
+      "maxDuration": 300
     }
   },
   "headers": [
     {
-      "source": "/app/v2/(.*)",
+      "source": "/app/(v2|v3)/(.*)",
       "headers": [
         {
           "key": "X-Content-Type-Options",
@@ -27,6 +33,14 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "X-Rate-Limit-Config",
+          "value": "4000 RPM, 2000000 ITPM, 400000 OTPM"
         }
       ]
     }
@@ -35,6 +49,29 @@
     {
       "source": "/app/v2",
       "destination": "/app/v2"
+    },
+    {
+      "source": "/app/v3",
+      "destination": "/app/v3"
     }
-  ]
+  ],
+  "firewall": {
+    "rules": [
+      {
+        "id": "rate_limit_v3_api",
+        "condition": {
+          "op": "contains",
+          "path": "/api/v3/"
+        },
+        "action": {
+          "type": "rateLimit",
+          "config": {
+            "window": "60s",
+            "limit": 100,
+            "identifier": "ip"
+          }
+        }
+      }
+    ]
+  }
 }
