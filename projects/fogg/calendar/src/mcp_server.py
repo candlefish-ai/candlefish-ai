@@ -2,6 +2,8 @@
 
 import asyncio
 import json
+import time
+import uuid
 from datetime import datetime
 from typing import Any
 
@@ -14,7 +16,13 @@ from src.calendar_manager import (
     create_recurring_event,
     share_calendar_with_group,
 )
+from src.calendar_manager_idempotent import create_event_idempotent
 from src.introspect import list_all_calendars, list_group_members
+from src.logging import get_logger, log_mcp_tool_invocation
+from src.metrics import get_metrics_manager
+
+logger = get_logger()
+metrics = get_metrics_manager()
 
 
 class ListEventsArgs(BaseModel):
@@ -35,13 +43,29 @@ class CreateEventArgs(BaseModel):
     duration_minutes: int
     attendee_emails: list[str] = []
     recurrence_rule: str = ""
+    external_id: str = ""  # For idempotency
 
 
-class SyncGroupArgs(BaseModel):
-    """Arguments for sync_group tool."""
+class ShareCalendarArgs(BaseModel):
+    """Arguments for share_calendar tool."""
 
     calendar_id: str
     group_email: str
+    role: str = "writer"  # reader, writer, owner
+
+
+class GetGroupMembersArgs(BaseModel):
+    """Arguments for get_group_members tool."""
+
+    group_email: str
+
+
+class UpdateEventAttendeesArgs(BaseModel):
+    """Arguments for update_event_attendees tool."""
+
+    calendar_id: str
+    event_id: str
+    attendee_emails: list[str]
 
 
 class OptimizeCadenceArgs(BaseModel):
@@ -49,6 +73,15 @@ class OptimizeCadenceArgs(BaseModel):
 
     calendar_id: str
     months_to_analyze: int = 12
+
+
+class GetFreeBusyArgs(BaseModel):
+    """Arguments for get_free_busy tool."""
+
+    calendar_id: str
+    emails: list[str]
+    start_time: str  # ISO format
+    end_time: str  # ISO format
 
 
 # Initialize MCP server
@@ -121,15 +154,48 @@ async def list_tools() -> list[Tool]:
             },
         ),
         Tool(
-            name="sync_group",
-            description="Sync calendar with Google Group members",
+            name="share_calendar",
+            description="Share a calendar with a Google Group",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "calendar_id": {"type": "string", "description": "Calendar ID"},
                     "group_email": {"type": "string", "description": "Google Group email"},
+                    "role": {
+                        "type": "string",
+                        "description": "Access role (reader, writer, owner)",
+                        "default": "writer",
+                    },
                 },
                 "required": ["calendar_id", "group_email"],
+            },
+        ),
+        Tool(
+            name="get_group_members",
+            description="Get members of a Google Group",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "group_email": {"type": "string", "description": "Google Group email"},
+                },
+                "required": ["group_email"],
+            },
+        ),
+        Tool(
+            name="update_event_attendees",
+            description="Update attendees for an existing event",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "calendar_id": {"type": "string", "description": "Calendar ID"},
+                    "event_id": {"type": "string", "description": "Event ID"},
+                    "attendee_emails": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "List of attendee emails",
+                    },
+                },
+                "required": ["calendar_id", "event_id", "attendee_emails"],
             },
         ),
         Tool(
@@ -154,14 +220,31 @@ async def list_tools() -> list[Tool]:
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     """Handle tool calls."""
+    start_time = time.time()
+    trace_id = str(uuid.uuid4())
+    
+    # Log tool invocation
+    log_mcp_tool_invocation(name, arguments, trace_id)
+    
     try:
+        result = None
+        
         if name == "list_calendars":
             calendars = await asyncio.to_thread(list_all_calendars)
             result = [
                 {"id": cal.id, "name": cal.summary, "access_role": cal.access_role}
                 for cal in calendars
             ]
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
 
         elif name == "list_events":
             args = ListEventsArgs(**arguments)
@@ -184,7 +267,16 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 }
                 for event in events
             ]
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
 
         elif name == "create_event":
             args = CreateEventArgs(**arguments)
@@ -192,7 +284,23 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
             start_date = parser.parse(args.start_time)
 
-            if args.recurrence_rule:
+            # Use external ID for idempotency
+            if args.external_id:
+                event_id, was_created = await asyncio.to_thread(
+                    create_event_idempotent,
+                    args.calendar_id,
+                    args.summary,
+                    args.description,
+                    start_date,
+                    args.duration_minutes,
+                    args.external_id,
+                    args.attendee_emails,
+                    args.recurrence_rule,
+                )
+                status = "created" if was_created else "already_exists"
+                response = [TextContent(type="text", text=f"Event {status}: {event_id}")]
+            elif args.recurrence_rule:
+                # Legacy non-idempotent path
                 event_id = await asyncio.to_thread(
                     create_recurring_event,
                     args.calendar_id,
@@ -203,6 +311,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                     args.attendee_emails,
                     args.recurrence_rule,
                 )
+                response = [TextContent(type="text", text=f"Created event: {event_id}")]
             else:
                 # For non-recurring events, we'd need to implement a separate function
                 return [
@@ -215,7 +324,16 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                     )
                 ]
 
-            return [TextContent(type="text", text=f"Created event: {event_id}")]
+            response = [TextContent(type="text", text=f"Created event: {event_id}")]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
 
         elif name == "sync_group":
             args = SyncGroupArgs(**arguments)
@@ -235,7 +353,16 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 "member_count": len(member_emails),
                 "members": member_emails,
             }
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
 
         elif name == "optimize_cadence":
             args = OptimizeCadenceArgs(**arguments)
@@ -260,13 +387,35 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                     day: f"{rate:.1%}" for day, rate in analysis.attendance_by_day.items()
                 },
             }
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
+            response = [TextContent(type="text", text=json.dumps(result, indent=2))]
+            
+            # Record success and return
+            duration_ms = (time.time() - start_time) * 1000
+            logger.info("MCP tool invocation completed",
+                        tool=name,
+                        trace_id=trace_id,
+                        duration_ms=duration_ms)
+            metrics.record_mcp_invocation(name, success=True, duration_ms=duration_ms)
+            return response
 
         else:
+            logger.warning("Unknown MCP tool invoked", tool=name, trace_id=trace_id)
             return [TextContent(type="text", text=f"Unknown tool: {name}")]
 
     except Exception as e:
+        duration_ms = (time.time() - start_time) * 1000
+        logger.error("MCP tool invocation failed", 
+                    tool=name, 
+                    trace_id=trace_id,
+                    duration_ms=duration_ms,
+                    error=str(e))
+        metrics.record_mcp_invocation(name, success=False, duration_ms=duration_ms)
         return [TextContent(type="text", text=f"Error: {e!s}")]
+    
+    # This should never be reached as all branches above return
+    # But just in case:
+    logger.error("Unreachable code in MCP tool handler", tool=name, trace_id=trace_id)
+    return [TextContent(type="text", text="Unexpected error")]
 
 
 async def main():

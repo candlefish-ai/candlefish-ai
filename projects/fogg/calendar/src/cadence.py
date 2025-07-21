@@ -8,6 +8,7 @@ from googleapiclient.errors import HttpError
 
 from src.auth import build_calendar_service
 from src.models import CadenceAnalysis, Event
+from src.utils.api_client import execute_google_api_call
 
 
 def get_events_for_calendar(
@@ -27,8 +28,8 @@ def get_events_for_calendar(
     events = []
 
     try:
-        events_result = (
-            service.events()
+        events_result = execute_google_api_call(
+            lambda: service.events()
             .list(
                 calendarId=calendar_id,
                 timeMin=time_min.isoformat() + "Z",
@@ -36,7 +37,8 @@ def get_events_for_calendar(
                 singleEvents=True,
                 orderBy="startTime",
             )
-            .execute()
+            .execute(),
+            f"get_events_for_calendar({calendar_id})"
         )
 
         for event in events_result.get("items", []):
