@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     
     const result = streamText({
       model: anthropic('claude-sonnet-4-20250514'),
-      experimental_extendThinking: { budgetTokens: 2_000_000 },
       maxTokens: 400_000,
       messages,
       system: 'You are Candlefish AI assistant, illuminating AI transformation paths.',

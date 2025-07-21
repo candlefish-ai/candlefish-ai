@@ -27,11 +27,8 @@ export async function POST(request: Request) {
     }
 
     // Generate with experimental_extendThinking
-    const { text, response } = await generateText({
+    const { text } = await generateText({
       model: anthropic('claude-sonnet-4-20250514'),
-      experimental_extendThinking: { 
-        budgetTokens: 2_000_000 // 2M thinking tokens
-      },
       maxTokens: 400_000, // 400K output tokens
       system: `You are an expert SEO specialist for Candlefish AI, a consciousness-aligned AI consultancy. 
       Generate compelling, SEO-optimized meta tags that:

@@ -54,24 +54,5 @@
       "source": "/app/v3",
       "destination": "/app/v3"
     }
-  ],
-  "firewall": {
-    "rules": [
-      {
-        "id": "rate_limit_v3_api",
-        "condition": {
-          "op": "contains",
-          "path": "/api/v3/"
-        },
-        "action": {
-          "type": "rateLimit",
-          "config": {
-            "window": "60s",
-            "limit": 100,
-            "identifier": "ip"
-          }
-        }
-      }
-    ]
-  }
+  ]
 }
