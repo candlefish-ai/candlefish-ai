@@ -1,76 +1,67 @@
-# CLAUDE.md
+# candlefish-ai – Claude.md (FULL-PERMISSIONS, July 2025)
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## 1. Project DNA
+- **Root**: `/Users/patricksmith/candlefish-ai`
+- **Stack**: Python 3.12 (primary), TypeScript/Node.js (CLI tools), React (frontend)
+- **Package managers**: poetry (Python), pnpm (Node)
+- **Shell**: bash
+- **Goals**: test-driven feature dev, large-scale refactors, CI/CD automation
 
-## Project Overview
-AI-powered meta tag generator using Next.js 14 (App Router) and Claude Sonnet 4 with extended thinking capabilities.
+## 2. LLM Priority Order & SDKs
+1. Anthropic SDK – claude-opus-4-20250514, claude-3-5-sonnet
+2. OpenAI SDK – gpt-4o, gpt-4-turbo
+3. Together AI SDK
+4. Fireworks AI SDK
 
-## Key Commands
-```bash
-# Development
-npm run dev        # Start development server on localhost:3000
+All keys live in Infisical (preferred) or AWS Secrets Manager.  
+Use `infisical run --env=prod -- <cmd>` or AWS Secrets Manager SDK for runtime injection.
 
-# Production  
-npm run build      # Build for production
-npm run start      # Start production server
+## 3. MCP Servers (auto-install on first use)
+- filesystem (built-in)
+- postgres (PGVector)     – `npx @modelcontextprotocol/server-postgres`
+- github                  – `npx @modelcontextprotocol/server-github`
+- aws                     – `npx @modelcontextprotocol/server-aws`
+- context7                – `npx @modelcontextprotocol/server-context7`
+- huggingface             – `npx @modelcontextprotocol/server-huggingface`
+- anthropic               – `npx @modelcontextprotocol/server-anthropic`
+- openai                  – `npx @modelcontextprotocol/server-openai`
 
-# Setup
-npm install        # Install dependencies
-cp .env.local.example .env.local  # Configure environment (add ANTHROPIC_API_KEY)
-```
-
-## Architecture
-
-### Directory Structure
-- `/app` - Next.js App Router pages and API routes
-- `/app/v2` - Version 2 with advanced Claude Sonnet 4 integration (extended thinking)
-- `/app/api` - API routes for AI generation
-- `/components` - React components (primarily in v2 subdirectory)
-- `/styles` - CSS files with modern gradient animations
-
-### API Endpoints
-- `POST /api/generate-meta` - Original meta generation endpoint
-- `POST /app/v2/api/generate-meta` - V2 endpoint with extended thinking (2M token budget)
-
-Both endpoints expect:
+Ensure each is listed in `.claude/settings.json`:
 ```json
 {
-  "business_name": "string",
-  "business_description": "string",
-  "industry": "string"
+  "mcpServers": {
+    "postgres": { "command": "npx", "args": ["@modelcontextprotocol/server-postgres"] },
+    "github":   { "command": "npx", "args": ["@modelcontextprotocol/server-github"] },
+    "aws":      { "command": "npx", "args": ["@modelcontextprotocol/server-aws"] },
+    "context7": { "command": "npx", "args": ["@modelcontextprotocol/server-context7"] },
+    "huggingface": { "command": "npx", "args": ["@modelcontextprotocol/server-huggingface"] },
+    "anthropic": { "command": "npx", "args": ["@modelcontextprotocol/server-anthropic"] },
+    "openai": { "command": "npx", "args": ["@modelcontextprotocol/server-openai"] }
+  }
 }
 ```
 
-### Key Technologies
-- **Next.js 14**: App Router with Edge Runtime optimization
-- **TypeScript**: Strict mode enabled
-- **Vercel AI SDK v4.2.0**: With experimental extended thinking
-- **@ai-sdk/anthropic**: Claude Sonnet 4 integration
-- **React 18**: Modern UI components
+## 4. RAG / Vector Stores
+- **PGVector** (production) – via postgres MCP
+- **ChromaDB** (local dev)  – via `chroma run --path ./chroma_data`
+- **FAISS** (ephemeral)     – via Python `langchain_community.vectorstores.FAISS`
 
-### Important Implementation Details
+## 5. Global Tools (pre-installed in container)
+aws-cli, gh, kubectl, terraform, ruff, pytest, selenium, infisical
 
-1. **Rate Limiting**: Configured in `/middleware.ts`
-   - Global: 4,000 requests per minute
-   - Per IP: 100 requests per minute
-   - In-memory storage (development only)
+## 6. Secrets Management
+- Use `infisical run` to inject secrets into any command:
+  ```bash
+  infisical run --env=prod -- poetry run pytest
+  ```
+- Fall back to AWS Secrets Manager SDK for legacy keys.
 
-2. **AI Configuration**: 
-   - Model: `claude-opus-4-20250514` (Claude Sonnet 4)
-   - Extended thinking with 2M token budget (v2)
-   - 300-second max duration for generation functions
+## 7. Workflows & Commands
+- **Test-driven dev**: `poetry run pytest -q` or `pnpm test`
+- **Lint/format**: `ruff check && ruff format`
+- **Type-check**: `pnpm tsc --noEmit`
+- **CI/CD**: GitHub Actions (use gh MCP to open/merge PRs, trigger workflows)
 
-3. **Deployment**:
-   - Optimized for Vercel deployment
-   - Security headers in `vercel.json`
-   - Edge runtime for performance
-
-### Development Patterns
-- Clear separation between v1 and v2 implementations
-- Modular component architecture in v2
-- Industry-based content generation with structured JSON responses
-- Clean API route handlers with proper error handling
-
-### Environment Requirements
-- `ANTHROPIC_API_KEY` must be set in `.env.local`
-- Node.js 18+ recommended for development
+## 8. Permissions
+You have full permissions inside the container.  
+Outside the container, respect host isolation.

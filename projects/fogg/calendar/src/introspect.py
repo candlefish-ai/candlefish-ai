@@ -1,10 +1,10 @@
 """Introspection module for FOGG calendars and groups"""
 
-
 from googleapiclient.errors import HttpError
 
 from src.auth import build_calendar_service, build_directory_service
 from src.models import CalendarInfo, GroupMember
+from src.utils.api_client import execute_google_api_call
 
 
 def list_fogg_calendars() -> list[CalendarInfo]:
@@ -17,7 +17,10 @@ def list_fogg_calendars() -> list[CalendarInfo]:
     calendars = []
 
     try:
-        calendar_list = service.calendarList().list().execute()
+        calendar_list = execute_google_api_call(
+            lambda: service.calendarList().list().execute(),
+            "list_fogg_calendars"
+        )
 
         for calendar in calendar_list.get("items", []):
             # Filter for FOGG-related calendars
@@ -51,7 +54,10 @@ def list_all_calendars() -> list[CalendarInfo]:
     calendars = []
 
     try:
-        calendar_list = service.calendarList().list().execute()
+        calendar_list = execute_google_api_call(
+            lambda: service.calendarList().list().execute(),
+            "list_all_calendars"
+        )
 
         for calendar in calendar_list.get("items", []):
             calendars.append(
@@ -85,7 +91,10 @@ def list_group_members(group_email: str) -> list[GroupMember]:
     members = []
 
     try:
-        result = service.members().list(groupKey=group_email).execute()
+        result = execute_google_api_call(
+            lambda: service.members().list(groupKey=group_email).execute(),
+            f"list_group_members({group_email})"
+        )
 
         for member in result.get("members", []):
             members.append(
@@ -100,10 +109,11 @@ def list_group_members(group_email: str) -> list[GroupMember]:
 
         # Handle pagination
         while "nextPageToken" in result:
-            result = (
-                service.members()
+            result = execute_google_api_call(
+                lambda: service.members()
                 .list(groupKey=group_email, pageToken=result["nextPageToken"])
-                .execute()
+                .execute(),
+                f"list_group_members_page({group_email})"
             )
             for member in result.get("members", []):
                 members.append(

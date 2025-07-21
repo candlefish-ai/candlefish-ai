@@ -1,11 +1,11 @@
-"""Google API Authentication Module"""
+"""Google API Authentication Module - Legacy wrapper for backward compatibility."""
 
-import os
+from typing import Optional
 
-from google.oauth2.credentials import Credentials
-from google.oauth2.service_account import Credentials as ServiceAccountCredentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth import credentials as auth_credentials
 from googleapiclient.discovery import Resource, build
+
+from src.auth.gcp_credentials import GCPCredentialsManager
 
 # Required scopes for calendar and group management
 SCOPES = [
@@ -13,46 +13,29 @@ SCOPES = [
     "https://www.googleapis.com/auth/admin.directory.group.readonly",
 ]
 
+# Global credentials manager
+_credentials_manager: Optional[GCPCredentialsManager] = None
 
-def get_credentials() -> Credentials:
+
+def get_credentials(impersonate_email: Optional[str] = None) -> auth_credentials.Credentials:
     """Get Google API credentials from environment or ADC.
+
+    Args:
+        impersonate_email: Optional service account email to impersonate for domain-wide delegation
 
     Returns:
         Credentials: Authenticated Google credentials
     """
-    creds = None
-
-    # First check for service account JSON path
-    service_account_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-    if service_account_path and os.path.exists(service_account_path):
-        creds = ServiceAccountCredentials.from_service_account_file(
-            service_account_path, scopes=SCOPES
+    global _credentials_manager
+    if _credentials_manager is None or _credentials_manager.impersonate_email != impersonate_email:
+        _credentials_manager = GCPCredentialsManager(
+            scopes=SCOPES,
+            impersonate_email=impersonate_email
         )
-        return creds
-
-    # Try using Application Default Credentials (ADC)
-    try:
-        import google.auth
-
-        creds, project = google.auth.default(scopes=SCOPES)
-        return creds
-    except Exception as e:
-        print(f"ADC authentication failed: {e}")
-
-    # Fall back to OAuth2 flow if available
-    if os.path.exists("credentials.json"):
-        flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-        creds = flow.run_local_server(port=0)
-
-    if not creds:
-        raise ValueError(
-            "No valid authentication method found. Please set up ADC or provide credentials.json"
-        )
-
-    return creds
+    return _credentials_manager.get_credentials()
 
 
-def verify_scopes(creds: Credentials) -> bool:
+def verify_scopes(creds: auth_credentials.Credentials) -> bool:
     """Verify that credentials have required scopes.
 
     Args:

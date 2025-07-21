@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from googleapiclient.errors import HttpError
 
 from src.auth import build_calendar_service
+from src.utils.api_client import execute_google_api_call
 
 
 def create_calendar(name: str, description: str = "", time_zone: str = "UTC") -> str:
@@ -28,7 +29,10 @@ def create_calendar(name: str, description: str = "", time_zone: str = "UTC") ->
     }
 
     try:
-        created_calendar = service.calendars().insert(body=calendar).execute()
+        created_calendar = execute_google_api_call(
+            lambda: service.calendars().insert(body=calendar).execute(),
+            f"create_calendar({name})"
+        )
         print(f"Created calendar: {created_calendar['id']}")
         return created_calendar["id"]
     except HttpError as error:
@@ -58,7 +62,10 @@ def share_calendar_with_group(calendar_id: str, group_email: str, role: str = "w
     }
 
     try:
-        service.acl().insert(calendarId=calendar_id, body=rule).execute()
+        execute_google_api_call(
+            lambda: service.acl().insert(calendarId=calendar_id, body=rule).execute(),
+            f"share_calendar({calendar_id}, {group_email})"
+        )
         print(f"Shared calendar {calendar_id} with group {group_email} as {role}")
         return True
     except HttpError as error:
@@ -121,10 +128,11 @@ def create_recurring_event(
     }
 
     try:
-        created_event = (
-            service.events()
+        created_event = execute_google_api_call(
+            lambda: service.events()
             .insert(calendarId=calendar_id, body=event, sendUpdates="all")
-            .execute()
+            .execute(),
+            f"create_recurring_event({calendar_id}, {summary})"
         )
         print(f"Created recurring event: {created_event['id']}")
         return created_event["id"]
@@ -150,18 +158,24 @@ def update_event_attendees(
 
     try:
         # Get existing event
-        event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+        event = execute_google_api_call(
+            lambda: service.events().get(calendarId=calendar_id, eventId=event_id).execute(),
+            f"get_event({calendar_id}, {event_id})"
+        )
 
         # Update attendees
         event["attendees"] = [{"email": email} for email in attendee_emails]
 
         # Update event
-        service.events().update(
-            calendarId=calendar_id,
-            eventId=event_id,
-            body=event,
-            sendUpdates="all",
-        ).execute()
+        execute_google_api_call(
+            lambda: service.events().update(
+                calendarId=calendar_id,
+                eventId=event_id,
+                body=event,
+                sendUpdates="all",
+            ).execute(),
+            f"update_event_attendees({calendar_id}, {event_id})"
+        )
 
         print(f"Updated attendees for event {event_id}")
         return True
@@ -187,8 +201,8 @@ def find_recurring_event(calendar_id: str, summary_keyword: str) -> str | None:
         time_min = datetime.utcnow()
         time_max = time_min + relativedelta(years=1)
 
-        events_result = (
-            service.events()
+        events_result = execute_google_api_call(
+            lambda: service.events()
             .list(
                 calendarId=calendar_id,
                 timeMin=time_min.isoformat() + "Z",
@@ -196,7 +210,8 @@ def find_recurring_event(calendar_id: str, summary_keyword: str) -> str | None:
                 singleEvents=False,  # Include recurring events
                 q=summary_keyword,
             )
-            .execute()
+            .execute(),
+            f"find_recurring_event({calendar_id}, {summary_keyword})"
         )
 
         events = events_result.get("items", [])
@@ -225,7 +240,10 @@ def get_or_create_fogg_calendar() -> str:
 
     # Search for existing FOGG calendar
     try:
-        calendar_list = service.calendarList().list().execute()
+        calendar_list = execute_google_api_call(
+            lambda: service.calendarList().list().execute(),
+            "get_or_create_fogg_calendar"
+        )
 
         for calendar in calendar_list.get("items", []):
             if "fogg monthly" in calendar.get("summary", "").lower():
