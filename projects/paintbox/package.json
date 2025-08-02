@@ -52,6 +52,7 @@
     "@use-gesture/react": "^10.3.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "bull": "^4.16.5",
     "class-variance-authority": "^0.7.1",
@@ -93,7 +94,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^20.19.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
