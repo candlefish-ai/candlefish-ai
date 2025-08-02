@@ -1,0 +1,200 @@
+services:
+  # Web service for Next.js application
+  - type: web
+    name: paintbox-app
+    runtime: node
+    repo: https://github.com/aspenas/candlefish-ai
+    branch: main
+    rootDir: projects/paintbox
+    region: oregon # Options: oregon, ohio, frankfurt, singapore
+    plan: standard # Options: free, starter, standard, pro
+
+    # Build configuration
+    buildCommand: |
+      echo "🎨 Starting Paintbox build process..."
+      npm ci --production=false
+      echo "📦 Installing dependencies complete"
+      npm run build
+      echo "✅ Build complete"
+
+    # Start configuration
+    startCommand: npm run start
+
+    # Health check configuration
+    healthCheckPath: /api/health
+
+    # Environment variables
+    envVars:
+      # Core application configuration
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: paintbox-app
+          property: port
+
+      # Application URLs and endpoints
+      - key: SALESFORCE_LOGIN_URL
+        value: https://test.salesforce.com
+      - key: NEXT_PUBLIC_APP_URL
+        fromService:
+          type: web
+          name: paintbox-app
+          property: url
+
+      # AWS Configuration (for secrets fetching)
+      - key: AWS_REGION
+        value: us-east-1
+      - key: AWS_SECRETS_MANAGER_SECRET_NAME
+        value: paintbox/secrets
+
+      # Secrets from AWS Secrets Manager (set via deployment script)
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: COMPANYCAM_API_KEY
+        sync: false
+      - key: COMPANYCAM_COMPANY_ID
+        sync: false
+      - key: SALESFORCE_CLIENT_ID
+        sync: false
+      - key: SALESFORCE_CLIENT_SECRET
+        sync: false
+      - key: SALESFORCE_USERNAME
+        sync: false
+      - key: SALESFORCE_PASSWORD
+        sync: false
+      - key: SALESFORCE_SECURITY_TOKEN
+        sync: false
+
+      # Optional secrets
+      - key: SENTRY_DSN
+        sync: false
+      - key: LOGROCKET_APP_ID
+        sync: false
+
+      # Service URLs
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: paintbox-redis
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paintbox-db
+          property: connectionString
+
+      # Performance and scaling
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: MAX_OLD_SPACE_SIZE
+        value: "1024"
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=1024"
+
+    # Scaling configuration
+    autoDeploy: false # Set to true for automatic deploys from GitHub
+
+    # Disk space for build artifacts and logs
+    disk:
+      name: paintbox-disk
+      mountPath: /app/logs
+      sizeGB: 1
+
+  # WebSocket service (if needed for real-time features)
+  - type: web
+    name: paintbox-websocket
+    runtime: node
+    repo: https://github.com/aspenas/candlefish-ai
+    branch: main
+    rootDir: projects/paintbox
+    region: oregon
+    plan: starter
+
+    buildCommand: |
+      echo "🔌 Building WebSocket service..."
+      npm ci --production=false
+      npm run build:websocket
+
+    startCommand: npm run start:ws
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: paintbox-websocket
+          property: port
+      - key: WS_PORT
+        value: "3001"
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: paintbox-redis
+          property: connectionString
+
+    autoDeploy: false
+
+  # Redis service for caching and session storage
+  - type: redis
+    name: paintbox-redis
+    plan: starter # Options: free, starter, standard, pro
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: [] # Leave empty for access from Render services only
+
+    # Redis configuration
+    engineVersion: "7.0"
+
+    # Persistence configuration
+    persistence: true
+
+    # Memory optimization
+    configs:
+      - key: maxmemory-samples
+        value: "10"
+      - key: timeout
+        value: "300"
+
+# PostgreSQL database for persistent data storage
+databases:
+  - name: paintbox-db
+    plan: starter # Options: free, starter, standard, pro
+    databaseName: paintbox
+    user: paintbox_user
+    ipAllowList: [] # Leave empty for access from Render services only
+
+    # Database version
+    version: "15"
+
+    # Backup configuration
+    backupRetentionDays: 7
+
+# Environment groups for shared configuration
+envGroups:
+  - name: paintbox-common
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TZ
+        value: UTC
+      - key: LOG_LEVEL
+        value: info
+
+      # Application configuration
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: SKIP_ENV_VALIDATION
+        value: "false"
+
+      # Performance settings
+      - key: TURBO_TEAM
+        value: paintbox
+      - key: TURBO_API
+        value: https://vercel.com/api/turborepo
+
+      # Security settings
+      - key: FORCE_HTTPS
+        value: "true"
+      - key: TRUST_PROXY
+        value: "true"
