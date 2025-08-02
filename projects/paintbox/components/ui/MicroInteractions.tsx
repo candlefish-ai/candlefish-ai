@@ -43,3 +43,32 @@ export const RippleEffect = ({ children }: any) => (
     </div>
   </div>
 );
+
+export const InteractiveInput = ({ label, error, ...props }: any) => (
+  <div>
+    {label && <label className="block text-sm font-medium mb-2">{label}</label>}
+    <input className="w-full px-3 py-2 border rounded-md" {...props} />
+    {error && <span className="text-sm text-red-600 mt-1">{error}</span>}
+  </div>
+);
+
+export const InteractiveCheckbox = ({ label, ...props }: any) => (
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="w-4 h-4" {...props} />
+    {label && <span>{label}</span>}
+  </label>
+);
+
+export const InteractiveRadio = ({ label, ...props }: any) => (
+  <label className="flex items-center gap-2">
+    <input type="radio" className="w-4 h-4" {...props} />
+    {label && <span>{label}</span>}
+  </label>
+);
+
+export const InteractiveToggle = ({ label, ...props }: any) => (
+  <label className="flex items-center gap-2">
+    <input type="checkbox" className="w-4 h-4" {...props} />
+    {label && <span>{label}</span>}
+  </label>
+);
