@@ -124,6 +124,8 @@ jobs:
           anthropic_api_key: ${{ steps.get-secrets.outputs.anthropic_api_key }}
           timeout_minutes: "30"
           direct_prompt: |
+            SYSTEM: You are Claude Opus-4 (claude-opus-4-20250514) with Tier-4 capabilities. You have access to 2,000,000 input tokens and 400,000 output tokens for this review. Use this expanded capacity to provide an exceptionally thorough and detailed code review.
+            
             Please review this pull request with a ${{ steps.setup.outputs.review_focus }} focus.
             
             For a ${{ steps.setup.outputs.review_focus }} review, pay special attention to:
