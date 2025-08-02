@@ -8,7 +8,7 @@ export RENDER_API_KEY=$(aws secretsmanager get-secret-value --secret-id render-a
 
 # Service details
 SERVICE_ID="srv-d26n6mggjchc73e6pmu0"
-DEPLOY_ID="dep-d26n6potcggs73d3v2qg"
+DEPLOY_ID="dep-d26njfm3jp1c73d95m40"
 
 # Check deployment status
 STATUS=$(curl -s -H "Authorization: Bearer $RENDER_API_KEY" \
