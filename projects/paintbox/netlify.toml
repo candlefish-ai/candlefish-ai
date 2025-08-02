@@ -7,6 +7,9 @@
   NODE_VERSION = "20"
   NEXT_TELEMETRY_DISABLED = "1"
 
+# Password protection using Netlify's visitor access control
+# Note: Requires configuring visitor access password in Netlify UI
+
 # Headers for security and performance
 [[headers]]
   for = "/*"

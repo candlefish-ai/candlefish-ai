@@ -41,11 +41,10 @@ export default function Home() {
           box-sizing: border-box;
         }
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-            Cantarell, sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
           line-height: 1.6;
-          color: #1a1a1a;
-          background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+          color: #ffffff;
+          background: #000000;
           min-height: 100vh;
         }
         .container {
@@ -59,52 +58,78 @@ export default function Home() {
           animation: fadeIn 1s ease-out;
         }
         .logo {
-          font-size: 3rem;
-          font-weight: 300;
-          letter-spacing: 0.1em;
+          font-size: 2.5rem;
+          font-weight: 400;
+          letter-spacing: 0.05em;
           margin-bottom: 1rem;
-          background: linear-gradient(45deg, #ff6b6b, #ffd93d);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
+        }
+        .logo-mark {
+          width: 80px;
+          height: 80px;
+          background: #00CED1;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          color: #000000;
+          font-size: 40px;
         }
         .tagline {
           font-size: 1.25rem;
-          color: #4a5568;
+          color: #d4d4d4;
           margin-bottom: 2rem;
         }
         .hero {
-          background: rgba(255, 255, 255, 0.9);
-          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
           padding: 3rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           margin-bottom: 3rem;
           animation: slideUp 1s ease-out 0.3s both;
         }
         .hero h1 {
-          font-size: 2.5rem;
+          font-size: 3rem;
+          font-weight: 300;
           margin-bottom: 1.5rem;
-          color: #2d3748;
+          color: #ffffff;
+          line-height: 1.2;
+        }
+        .hero h1 .accent {
+          color: #00CED1;
         }
         .hero p {
-          font-size: 1.125rem;
-          color: #4a5568;
+          font-size: 1.25rem;
+          color: #d4d4d4;
           margin-bottom: 2rem;
-          line-height: 1.8;
+          line-height: 1.6;
+          font-weight: 300;
         }
         .cta-button {
           display: inline-block;
           padding: 1rem 2rem;
-          background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-          color: white;
+          background: #00CED1;
+          color: #000000;
           text-decoration: none;
-          border-radius: 50px;
-          font-weight: 600;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-radius: 0;
+          font-weight: 500;
+          transition: background 0.3s ease, transform 0.3s ease;
+          position: relative;
         }
         .cta-button:hover {
+          background: #40E0D0;
           transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        .cta-button::after {
+          content: '→';
+          margin-left: 0.5rem;
+          display: inline-block;
+          transition: none;
         }
         .features {
           display: grid;
@@ -113,36 +138,45 @@ export default function Home() {
           margin-bottom: 3rem;
         }
         .feature {
-          background: rgba(255, 255, 255, 0.8);
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           padding: 2rem;
-          border-radius: 15px;
+          border-radius: 8px;
           text-align: center;
           animation: fadeIn 1s ease-out 0.6s both;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feature:hover {
+          transform: translateY(-4px);
+          border-color: #00CED1;
         }
         .feature-icon {
           font-size: 3rem;
           margin-bottom: 1rem;
+          color: #00CED1;
         }
         .feature h3 {
           font-size: 1.5rem;
           margin-bottom: 1rem;
-          color: #2d3748;
+          color: #ffffff;
+          font-weight: 500;
         }
         .feature p {
-          color: #4a5568;
+          color: #d4d4d4;
         }
         .meta-generator {
-          background: rgba(255, 255, 255, 0.9);
-          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
           padding: 3rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
           margin-bottom: 3rem;
           animation: fadeIn 1s ease-out 0.9s both;
         }
         .meta-generator h2 {
-          font-size: 2rem;
+          font-size: 2.5rem;
+          font-weight: 300;
           margin-bottom: 1.5rem;
-          color: #2d3748;
+          color: #ffffff;
           text-align: center;
         }
         .form-group {
@@ -151,60 +185,71 @@ export default function Home() {
         .form-group label {
           display: block;
           margin-bottom: 0.5rem;
-          color: #4a5568;
-          font-weight: 600;
+          color: #d4d4d4;
+          font-weight: 500;
         }
         .form-group input {
           width: 100%;
           padding: 0.75rem;
-          border: 2px solid #e2e8f0;
-          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 0;
           font-size: 1rem;
           transition: border-color 0.3s ease;
+          background: rgba(255, 255, 255, 0.05);
+          color: #ffffff;
         }
         .form-group input:focus {
           outline: none;
-          border-color: #667eea;
+          border-color: #00CED1;
         }
         .generate-button {
           width: 100%;
-          padding: 1rem;
-          background: linear-gradient(45deg, #ff6b6b 0%, #ffd93d 100%);
-          color: white;
+          padding: 0.75rem 1.5rem;
+          background: #00CED1;
+          color: #000000;
           border: none;
-          border-radius: 8px;
-          font-size: 1.125rem;
-          font-weight: 600;
+          border-radius: 0;
+          font-size: 1rem;
+          font-weight: 500;
           cursor: pointer;
-          transition: transform 0.3s ease;
+          transition: background 0.3s ease, transform 0.3s ease;
+          position: relative;
         }
         .generate-button:hover {
+          background: #40E0D0;
           transform: translateY(-2px);
         }
         .generate-button:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
+        .generate-button::after {
+          content: '→';
+          margin-left: 0.5rem;
+          display: inline-block;
+          transition: none;
+        }
         .result {
           margin-top: 2rem;
           padding: 1.5rem;
-          background: #f7fafc;
-          border-radius: 8px;
-          border: 2px solid #e2e8f0;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 0;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .result h3 {
-          color: #2d3748;
+          color: #ffffff;
           margin-bottom: 0.5rem;
         }
         .result p {
-          color: #4a5568;
-          font-family: 'Courier New', monospace;
+          color: #d4d4d4;
+          font-family: 'Space Mono', 'SF Mono', Monaco, monospace;
           word-break: break-all;
         }
         footer {
           text-align: center;
           padding: 2rem 0;
-          color: #718096;
+          color: #737373;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         @keyframes fadeIn {
           from {
@@ -235,23 +280,39 @@ export default function Home() {
             padding: 1rem;
           }
         }
+        .grid-pattern {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-image: 
+            linear-gradient(rgba(0, 206, 209, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 206, 209, 0.03) 1px, transparent 1px);
+          background-size: 50px 50px;
+          pointer-events: none;
+          z-index: -1;
+        }
       `}</style>
 
+      <div className="grid-pattern"></div>
       <div className="container">
         <header>
-          <div className="logo">🕯️ CANDLEFISH AI 🐟</div>
+          <div className="logo">
+            <div className="logo-mark">C</div>
+            <span>CANDLEFISH</span>
+          </div>
           <p className="tagline">Illuminating the Depths of Artificial Intelligence</p>
         </header>
 
         <section className="hero">
-          <h1>Where Natural Wisdom Meets Artificial Intelligence</h1>
+          <h1>Illuminating the path to<br/><span className="accent">AI transformation</span></h1>
           <p>
-            Like the candlefish that lights up the ocean depths, we illuminate the path through
-            the vast sea of AI possibilities. Our consciousness-aligned approach ensures your
-            AI transformation enhances rather than replaces human intelligence.
+            We turn your slowest business processes into your fastest competitive 
+            advantages through discrete, composable AI modules.
           </p>
           <a href="#contact" className="cta-button">
-            Light Your Path Forward
+            Explore Partnership
           </a>
         </section>
 
@@ -284,7 +345,7 @@ export default function Home() {
 
         <section className="meta-generator">
           <h2>AI-Powered SEO Meta Generator</h2>
-          <p style={{ textAlign: 'center', marginBottom: '2rem', color: '#718096' }}>
+          <p style={{ textAlign: 'center', marginBottom: '2rem', color: '#d4d4d4' }}>
             Experience our AI capabilities. Generate optimized meta tags for your industry.
           </p>
           <form onSubmit={handleSubmit}>
@@ -305,9 +366,9 @@ export default function Home() {
           </form>
 
           {error && (
-            <div className="result" style={{ borderColor: '#feb2b2', background: '#fff5f5' }}>
-              <h3 style={{ color: '#c53030' }}>Error</h3>
-              <p style={{ color: '#c53030' }}>{error}</p>
+            <div className="result" style={{ borderColor: '#ff6b6b', background: 'rgba(255, 107, 107, 0.1)' }}>
+              <h3 style={{ color: '#ff6b6b' }}>Error</h3>
+              <p style={{ color: '#ff6b6b' }}>{error}</p>
             </div>
           )}
 

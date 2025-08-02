@@ -1,0 +1,142 @@
+{
+  "color": {
+    "base": {
+      "transparent": {
+        "value": "transparent",
+        "type": "color",
+        "description": "Fully transparent color"
+      },
+      "current": {
+        "value": "currentColor",
+        "type": "color",
+        "description": "Current text color"
+      }
+    },
+    "primitive": {
+      "black": {
+        "pure": {
+          "value": "oklch(0% 0 0)",
+          "type": "color",
+          "description": "Pure black in OKLCH space"
+        }
+      },
+      "white": {
+        "pure": {
+          "value": "oklch(100% 0 0)",
+          "type": "color",
+          "description": "Pure white in OKLCH space"
+        }
+      },
+      "candlefish": {
+        "teal": {
+          "50": {
+            "value": "oklch(95% 0.03 195)",
+            "type": "color",
+            "description": "Lightest candlefish teal - #E0FFFF equivalent"
+          },
+          "100": {
+            "value": "oklch(90% 0.05 195)",
+            "type": "color",
+            "description": "Very light candlefish teal"
+          },
+          "200": {
+            "value": "oklch(85% 0.07 195)",
+            "type": "color",
+            "description": "Light candlefish teal"
+          },
+          "300": {
+            "value": "oklch(80% 0.09 195)",
+            "type": "color",
+            "description": "Medium light candlefish teal"
+          },
+          "400": {
+            "value": "oklch(75% 0.11 195)",
+            "type": "color",
+            "description": "Medium candlefish teal - #40E0D0 equivalent"
+          },
+          "500": {
+            "value": "oklch(70% 0.13 195)",
+            "type": "color",
+            "description": "Primary candlefish teal - #00CED1 equivalent",
+            "ai": {
+              "generate": true,
+              "context": "Primary brand color representing the bioluminescent candlefish"
+            }
+          },
+          "600": {
+            "value": "oklch(65% 0.12 195)",
+            "type": "color",
+            "description": "Dark candlefish teal"
+          },
+          "700": {
+            "value": "oklch(55% 0.11 195)",
+            "type": "color",
+            "description": "Darker candlefish teal - #008B8D equivalent"
+          },
+          "800": {
+            "value": "oklch(45% 0.10 195)",
+            "type": "color",
+            "description": "Very dark candlefish teal"
+          },
+          "900": {
+            "value": "oklch(35% 0.08 195)",
+            "type": "color",
+            "description": "Darkest candlefish teal"
+          }
+        }
+      },
+      "gray": {
+        "50": {
+          "value": "oklch(98% 0 0)",
+          "type": "color",
+          "description": "Lightest gray"
+        },
+        "100": {
+          "value": "oklch(95% 0 0)",
+          "type": "color",
+          "description": "Very light gray"
+        },
+        "200": {
+          "value": "oklch(90% 0 0)",
+          "type": "color",
+          "description": "Light gray"
+        },
+        "300": {
+          "value": "oklch(83% 0 0)",
+          "type": "color",
+          "description": "Medium light gray"
+        },
+        "400": {
+          "value": "oklch(64% 0 0)",
+          "type": "color",
+          "description": "Medium gray"
+        },
+        "500": {
+          "value": "oklch(45% 0 0)",
+          "type": "color",
+          "description": "Medium dark gray"
+        },
+        "600": {
+          "value": "oklch(32% 0 0)",
+          "type": "color",
+          "description": "Dark gray"
+        },
+        "700": {
+          "value": "oklch(25% 0 0)",
+          "type": "color",
+          "description": "Darker gray"
+        },
+        "800": {
+          "value": "oklch(15% 0 0)",
+          "type": "color",
+          "description": "Very dark gray"
+        },
+        "900": {
+          "value": "oklch(9% 0 0)",
+          "type": "color",
+          "description": "Darkest gray"
+        }
+      }
+    }
+  }
+}
