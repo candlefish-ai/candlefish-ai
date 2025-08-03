@@ -30,7 +30,7 @@ const heroVariants = cva(
 )
 
 export interface HeroProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'title'>,
     VariantProps<typeof heroVariants> {
   badge?: React.ReactNode
   title?: React.ReactNode
@@ -134,7 +134,7 @@ Hero.displayName = "Hero"
 /**
  * Candlefish Hero - Pre-configured hero matching current site
  */
-interface CandlefishHeroProps extends Omit<HeroProps, "badge" | "background"> {
+export interface CandlefishHeroProps extends Omit<HeroProps, "badge" | "background"> {
   showParticles?: boolean
 }
 
@@ -177,7 +177,7 @@ CandlefishHero.displayName = "CandlefishHero"
 /**
  * Split Hero - Content on one side, visual on the other
  */
-interface SplitHeroProps extends HeroProps {
+export interface SplitHeroProps extends HeroProps {
   visual?: React.ReactNode
   visualPosition?: "left" | "right"
 }
