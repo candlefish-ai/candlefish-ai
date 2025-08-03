@@ -21,7 +21,7 @@ export function Logo({
     sm: { width: 32, height: 32, fontSize: '1rem' },
     md: { width: 48, height: 48, fontSize: '1.25rem' },
     lg: { width: 64, height: 64, fontSize: '1.5rem' },
-    xl: { width: 80, height: 80, fontSize: '2rem' }
+    xl: { width: 160, height: 160, fontSize: '2rem' }
   };
 
   const { width, height, fontSize } = sizeMap[size];
