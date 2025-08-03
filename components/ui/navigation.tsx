@@ -135,7 +135,7 @@ Navigation.displayName = "Navigation"
 /**
  * Navigation Item Component
  */
-interface NavItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+export interface NavItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean
 }
 
@@ -159,7 +159,7 @@ NavItem.displayName = "NavItem"
 /**
  * Breadcrumb Navigation
  */
-interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
+export interface BreadcrumbProps extends React.HTMLAttributes<HTMLElement> {
   items: Array<{
     label: string
     href?: string

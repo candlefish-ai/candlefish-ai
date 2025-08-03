@@ -110,7 +110,7 @@ Button.displayName = "Button"
 /**
  * Button Group Component for grouped button layouts
  */
-interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "vertical"
   attached?: boolean
 }

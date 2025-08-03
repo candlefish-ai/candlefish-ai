@@ -178,3 +178,452 @@
     transform: translateX(100%);
   }
 }
+
+/* Candlefish Brand System */
+@layer base {
+  :root {
+    /* Candlefish Brand Colors */
+    --candlefish-black: #000000;
+    --candlefish-white: #ffffff;
+    --candlefish-teal: #00CED1;
+    --candlefish-teal-dark: #008B8D;
+    --candlefish-teal-light: #40E0D0;
+    --candlefish-gray-100: #f4f4f5;
+    --candlefish-gray-300: #d4d4d8;
+    --candlefish-gray-500: #71717a;
+    --candlefish-gray-700: #3f3f46;
+    --candlefish-gray-900: #18181b;
+    
+    /* Spacing System */
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    --space-4xl: 6rem;
+    
+    /* Typography Scale */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+    
+    /* Animation Timings */
+    --transition-fast: 150ms;
+    --transition-normal: 300ms;
+    --transition-slow: 500ms;
+  }
+}
+
+/* Candlefish Page Structure */
+.candlefish-page {
+  min-height: 100vh;
+  background: var(--candlefish-black);
+  color: var(--candlefish-white);
+  font-family: var(--font-sans);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.candlefish-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* Grid Pattern Background */
+.candlefish-grid-pattern,
+.grid-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 206, 209, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 206, 209, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.candlefish-neural-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.02;
+  background-image: 
+    radial-gradient(circle at 20% 50%, var(--candlefish-teal) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, var(--candlefish-teal) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Header Styles */
+.candlefish-header {
+  text-align: center;
+  padding: var(--space-3xl) 0 var(--space-2xl);
+  position: relative;
+  z-index: 10;
+}
+
+.candlefish-tagline {
+  font-size: var(--text-lg);
+  color: var(--candlefish-gray-300);
+  margin-top: var(--space-md);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Hero Section */
+.candlefish-hero {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: var(--space-3xl);
+  margin-bottom: var(--space-3xl);
+  text-align: center;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.candlefish-hero__title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: var(--space-xl);
+  letter-spacing: -0.02em;
+}
+
+.candlefish-hero__accent {
+  color: var(--candlefish-teal);
+  font-weight: 400;
+}
+
+.candlefish-hero__subtitle {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: var(--candlefish-gray-300);
+  margin-bottom: var(--space-2xl);
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CTA Button Styles */
+.candlefish-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--candlefish-teal);
+  color: var(--candlefish-black);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--text-base);
+  transition: all var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+}
+
+.candlefish-cta:hover {
+  background: var(--candlefish-teal-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 206, 209, 0.3);
+}
+
+.candlefish-cta:active {
+  transform: translateY(0);
+}
+
+.candlefish-cta__icon {
+  margin-left: var(--space-sm);
+  transition: transform var(--transition-normal);
+}
+
+.candlefish-cta:hover .candlefish-cta__icon {
+  transform: translateX(4px);
+}
+
+/* Features Grid */
+.candlefish-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-3xl);
+  position: relative;
+  z-index: 10;
+}
+
+.candlefish-feature {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: var(--space-xl);
+  text-align: center;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.candlefish-feature:hover {
+  transform: translateY(-4px);
+  border-color: var(--candlefish-teal);
+  background: rgba(0, 206, 209, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 206, 209, 0.1);
+}
+
+.candlefish-feature__icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  filter: grayscale(1);
+  transition: filter var(--transition-normal);
+}
+
+.candlefish-feature:hover .candlefish-feature__icon {
+  filter: grayscale(0) drop-shadow(0 0 20px rgba(0, 206, 209, 0.5));
+}
+
+.candlefish-feature__title {
+  font-size: var(--text-xl);
+  font-weight: 400;
+  margin-bottom: var(--space-sm);
+  color: var(--candlefish-white);
+}
+
+.candlefish-feature__description {
+  color: var(--candlefish-gray-300);
+  line-height: 1.6;
+}
+
+/* Meta Generator Section */
+.candlefish-meta-generator {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: var(--space-3xl);
+  margin-bottom: var(--space-3xl);
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.candlefish-meta-generator__title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.candlefish-meta-generator__subtitle {
+  text-align: center;
+  color: var(--candlefish-gray-300);
+  margin-bottom: var(--space-2xl);
+}
+
+/* Form Styles */
+.candlefish-form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.candlefish-form-label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  color: var(--candlefish-gray-300);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.candlefish-form-input {
+  width: 100%;
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--candlefish-white);
+  font-size: var(--text-base);
+  transition: all var(--transition-normal);
+  font-family: var(--font-sans);
+}
+
+.candlefish-form-input:focus {
+  outline: none;
+  border-color: var(--candlefish-teal);
+  background: rgba(0, 206, 209, 0.05);
+  box-shadow: 0 0 0 3px rgba(0, 206, 209, 0.1);
+}
+
+.candlefish-form-input::placeholder {
+  color: var(--candlefish-gray-500);
+}
+
+.candlefish-generate-button {
+  width: 100%;
+  padding: var(--space-md) var(--space-xl);
+  background: var(--candlefish-teal);
+  color: var(--candlefish-black);
+  border: none;
+  font-weight: 500;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.candlefish-generate-button:hover:not(:disabled) {
+  background: var(--candlefish-teal-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 206, 209, 0.3);
+}
+
+.candlefish-generate-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.candlefish-generate-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Result Styles */
+.candlefish-result {
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.candlefish-result--error {
+  background: rgba(255, 107, 107, 0.05);
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.candlefish-result__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+  color: var(--candlefish-gray-300);
+}
+
+.candlefish-result__title--error {
+  color: #ff6b6b;
+}
+
+.candlefish-result__content {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--candlefish-white);
+  word-break: break-all;
+}
+
+.candlefish-result__content--error {
+  color: #ff6b6b;
+}
+
+/* Footer */
+.candlefish-footer {
+  text-align: center;
+  padding: var(--space-2xl) 0;
+  color: var(--candlefish-gray-500);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 10;
+  font-size: var(--text-sm);
+}
+
+/* Animations */
+@keyframes candlefish-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes candlefish-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.candlefish-fade-in {
+  animation: candlefish-fade-in 0.6s ease-out;
+}
+
+.candlefish-slide-up {
+  animation: candlefish-slide-up 0.8s ease-out;
+}
+
+.candlefish-stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.candlefish-stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.candlefish-stagger-3 {
+  animation-delay: 0.3s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .candlefish-hero {
+    padding: var(--space-xl);
+  }
+  
+  .candlefish-meta-generator {
+    padding: var(--space-xl);
+  }
+  
+  .candlefish-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Glow Effect for Candlefish Brand */
+.candlefish-glow {
+  filter: drop-shadow(0 0 20px rgba(0, 206, 209, 0.5));
+  transition: filter var(--transition-normal);
+}
+
+.candlefish-glow:hover {
+  filter: drop-shadow(0 0 30px rgba(0, 206, 209, 0.7));
+}
+
+/* Adaptive Layouts */
+.candlefish-adaptive-layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .candlefish-adaptive-layout {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
