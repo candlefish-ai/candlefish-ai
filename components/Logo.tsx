@@ -44,7 +44,7 @@ export function Logo({
       <div className={logoClasses}>
         <div className={logoMarkClasses}>
           <Image
-            src="/logo_candlefish.png"
+            src="/logo/candlefish_highquality.png"
             alt="Candlefish AI"
             width={width}
             height={height}
@@ -61,7 +61,7 @@ export function Logo({
       <div className={logoClasses}>
         <div className={logoMarkClasses}>
           <Image
-            src="/logo_candlefish.png"
+            src="/logo/candlefish_highquality.png"
             alt="Candlefish AI"
             width={width}
             height={height}
