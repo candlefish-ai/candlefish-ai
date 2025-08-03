@@ -127,11 +127,14 @@ const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
     )
 
     if (href) {
+      const { onClick, onMouseEnter, onMouseLeave, ...anchorProps } = props as any
       return (
         <a
           href={href}
           className={cn(logoVariants({ size, variant, layout }), className)}
-          {...props}
+          onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         >
           {content}
         </a>
@@ -154,7 +157,7 @@ Logo.displayName = "Logo"
 /**
  * Logo with Tagline Component
  */
-interface LogoWithTaglineProps extends LogoProps {
+export interface LogoWithTaglineProps extends LogoProps {
   tagline?: string
 }
 

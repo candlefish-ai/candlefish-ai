@@ -121,7 +121,7 @@ CardFooter.displayName = "CardFooter"
 /**
  * Feature Card - Specialized card for feature showcases
  */
-interface FeatureCardProps extends CardProps {
+export interface FeatureCardProps extends CardProps {
   icon?: React.ReactNode
   badge?: string
 }
@@ -153,7 +153,7 @@ FeatureCard.displayName = "FeatureCard"
 /**
  * Metric Card - For displaying metrics and statistics
  */
-interface MetricCardProps extends CardProps {
+export interface MetricCardProps extends CardProps {
   label: string
   value: string | number
   change?: {

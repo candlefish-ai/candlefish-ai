@@ -18,3 +18,16 @@ export const SliderButton = ({ children, onClick, active }: any) => {
 export const SliderButtonGroup = ({ children }: any) => {
   return <div className="flex gap-4">{children}</div>;
 };
+
+export const SliderButtonPresets = {
+  SubmitEstimate: ({ onClick }: { onClick: () => void }) => (
+    <SliderButton onClick={onClick} active>
+      Submit Estimate
+    </SliderButton>
+  ),
+  SaveDraft: ({ onClick }: { onClick: () => void }) => (
+    <SliderButton onClick={onClick} active={false}>
+      Save Draft
+    </SliderButton>
+  ),
+};

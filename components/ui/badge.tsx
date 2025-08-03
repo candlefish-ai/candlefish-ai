@@ -72,7 +72,7 @@ Badge.displayName = "Badge"
 /**
  * Status Badge - Specialized badge for status indicators
  */
-interface StatusBadgeProps extends BadgeProps {
+export interface StatusBadgeProps extends BadgeProps {
   status: "active" | "inactive" | "pending" | "error" | "success"
 }
 
@@ -105,7 +105,7 @@ StatusBadge.displayName = "StatusBadge"
 /**
  * Validation Phase Badge - The signature Candlefish badge
  */
-interface ValidationBadgeProps extends Omit<BadgeProps, "variant"> {
+export interface ValidationBadgeProps extends Omit<BadgeProps, "variant"> {
   phase?: string
 }
 
