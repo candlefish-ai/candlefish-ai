@@ -96,7 +96,7 @@
             
             if (password === 'candlefish') {
                 sessionStorage.setItem('family-letter-auth', 'true');
-                window.location.href = 'candlefish_update_08032025.html';
+                window.location.href = 'candlefish_update_08032025_family.html';
             } else {
                 error.style.display = 'block';
                 document.getElementById('password').value = '';
@@ -105,7 +105,7 @@
         
         // Check if already authenticated
         if (sessionStorage.getItem('family-letter-auth') === 'true') {
-            window.location.href = 'candlefish_update_08032025.html';
+            window.location.href = 'candlefish_update_08032025_family.html';
         }
         
         // Enter key support

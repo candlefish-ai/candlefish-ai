@@ -9,14 +9,13 @@
   # Default to the website app
   base = "apps/website"
   publish = "dist"
-  command = "pnpm install && pnpm build"
+  # Build command disabled for manual deployment
 
-# Redirect root domain to website app
+# SPA redirect for React Router
 [[redirects]]
   from = "/*"
-  to = "https://candlefish.ai/:splat"
+  to = "/index.html"
   status = 200
-  force = false
 
 # Context-specific configurations
 [context.production]
