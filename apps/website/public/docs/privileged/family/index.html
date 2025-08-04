@@ -143,7 +143,21 @@
 <body>
     <div class="letterhead">
         <div class="logo-container">
-            <img src="./candlefish_highquality_original.png" alt="Candlefish AI Logo" onerror="this.src='images/candlefish_highquality.png'">
+            <!-- Inline SVG logo to avoid authentication issues -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+                <defs>
+                    <linearGradient id="flame" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00CED1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#008B8B;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <!-- Candle flame -->
+                <path d="M100 5 Q95 15 100 25 Q105 15 100 5" fill="url(#flame)" />
+                <!-- Candle -->
+                <rect x="95" y="25" width="10" height="20" fill="#333" />
+                <!-- Company name -->
+                <text x="100" y="55" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#00CED1">CANDLEFISH</text>
+            </svg>
         </div>
         <div class="company-info">
             <div class="company-name">CANDLEFISH AI</div>
