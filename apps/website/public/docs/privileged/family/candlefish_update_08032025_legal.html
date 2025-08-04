@@ -83,7 +83,7 @@
 <body>
     <div class="header">
         <div class="confidential">Attorney-Client Privileged & Confidential</div>
-        <h1>Candlefish AI Corporate Structure</h1>
+        <h1>Candlefish.ai Studio Structure</h1>
         <div class="confidential">Legal Review Version - [DRAFT]</div>
         <div class="date">August 4, 2025</div>
     </div>
@@ -93,11 +93,11 @@
     RE: Proposed Family Business Structure - Legal Review</p>
 
     <div class="legal-notice">
-        <strong>Note:</strong> This document outlines the proposed corporate structure for Candlefish AI, with particular attention to regulatory compliance requirements during the founders' employment at Morgan Stanley.
+        <strong>Note:</strong> This document outlines the proposed studio structure for Candlefish.ai Studio, with particular attention to regulatory compliance requirements during the founders' employment at Morgan Stanley. The Studio model emphasizes creative technology development across multiple verticals.
     </div>
 
     <h2>Executive Summary</h2>
-    <p>This memorandum proposes a corporate structure for Candlefish AI that:</p>
+    <p>This memorandum proposes a studio structure for Candlefish.ai Studio that:</p>
     <ul>
         <li>Maintains compliance with SEC Rule 204A-1<sup><a href="#fn1" class="footnote-ref">1</a></sup> and FINRA Rule 3210<sup><a href="#fn2" class="footnote-ref">2</a></sup></li>
         <li>Provides for orderly transition of ownership upon change in employment status</li>
@@ -124,15 +124,26 @@
     <p>Upon both Karen's and my departure from Morgan Stanley (timing hypothetical and not predetermined):</p>
     <ul>
         <li>Karen and Patrick Smith: Equal majority control (combined 70-80%)</li>
-        <li>Tyler, Kendall, and Trevor Smith: Remaining equity (20-30% divided equally)</li>
+        <li>Tyler Robinson, Kendall, and Trevor Smith: Remaining equity (20-30% divided equally)</li>
         <li>Implementation: Operating Agreement amendment triggered by employment status change</li>
     </ul>
 
     <h2>Corporate Structure</h2>
-    <h3>Parent Entity: Candlefish.ai Holdings LLC</h3>
+    <h3>Current Structure: Single LLC During Morgan Stanley Employment</h3>
+    <p>During MS employment period (through ~2027):</p>
     <ul>
+        <li>Single entity: Candlefish.ai Studio LLC (Colorado)</li>
+        <li>100% owned by Patrick Smith</li>
+        <li>Simplified structure to avoid MS disclosure requirements</li>
+        <li>All operations consolidated under one entity</li>
+    </ul>
+    
+    <h3>Future Structure: Multi-Entity Post-MS Employment</h3>
+    <p>Post-MS transition (targeting 2027):</p>
+    <ul>
+        <li>Convert to Delaware LLC for favorable business law framework</li>
+        <li>Parent entity: Candlefish.ai Studio Holdings LLC</li>
         <li>Houses all intellectual property, trademarks, and core technology</li>
-        <li>Delaware LLC for favorable business law framework</li>
         <li>Pass-through taxation via Schedule K-1 distributions</li>
     </ul>
     
@@ -155,7 +166,7 @@
     <h2>Governance Framework</h2>
     <h3>Management Structure</h3>
     <ul>
-        <li>CEO/Managing Member: Day-to-day operational decisions</li>
+        <li>Managing Member (Patrick Smith): Day-to-day operational decisions</li>
         <li>Annual Family Board Meeting: Major strategic decisions</li>
         <li>Decisions requiring family approval:
             <ul>
@@ -170,10 +181,30 @@
     <h2>Employment and Compensation</h2>
     <h3>Active Participation</h3>
     <ul>
-        <li>Tyler Smith: Initial employee with market-rate base salary plus performance incentives</li>
+        <li>Tyler Robinson: Contingent employee - employment and compensation contingent upon Studio revenue generation. Will continue employment at Advantage Capital until Studio can support market-rate compensation</li>
         <li>Other family members: May join as employees or consultants at market rates</li>
         <li>Compensation methodology: Third-party benchmarking to ensure arm's length terms</li>
     </ul>
+    
+    <h3>Extended Family Strategic Roles</h3>
+    <ul>
+        <li><strong>Scotty Smith (Brother-in-law)</strong>: 
+            <ul>
+                <li>Role: COO/CFO (Chief Operating Officer / Chief Financial Officer)</li>
+                <li>Currently MS employee - will maintain separate LLC during MS employment</li>
+                <li>Profit Interest Range: 5-10% of Studio profits (non-dilutive to family ownership)</li>
+                <li>Engagement: Advisory/consulting basis until post-MS transition</li>
+            </ul>
+        </li>
+        <li><strong>Mike McIntosh (Father-in-law)</strong>:
+            <ul>
+                <li>Role: General Counsel</li>
+                <li>Profit Interest Range: 5-10% of Studio profits (non-dilutive to family ownership)</li>
+                <li>Engagement: Hourly consulting arrangement with potential for equity participation</li>
+            </ul>
+        </li>
+    </ul>
+    <p><strong>Note:</strong> Nuclear family (Patrick, Karen, Tyler Robinson, Kendall, Trevor) maintains 100% voting control and ownership. Extended family members receive profit participation only.</p>
     
     <h3>Passive Ownership</h3>
     <ul>
@@ -208,6 +239,54 @@
         <li>Family buyout provisions</li>
     </ul>
 
+    <h2>Delaware vs Colorado LLC Analysis</h2>
+    <h3>Current: Colorado LLC (During MS Employment)</h3>
+    <ul>
+        <li>Simpler compliance and reporting requirements</li>
+        <li>Lower formation and maintenance costs</li>
+        <li>Adequate for single-member LLC structure</li>
+        <li>Local registered agent readily available</li>
+    </ul>
+    
+    <h3>Future: Delaware LLC (Post-MS Employment, ~2027)</h3>
+    <p><strong>Why Delaware conversion makes sense post-MS:</strong></p>
+    <ul>
+        <li>Superior business law jurisprudence and Court of Chancery</li>
+        <li>More flexible operating agreement provisions</li>
+        <li>Better for multi-member LLC with complex profit sharing</li>
+        <li>Preferred by institutional investors and acquirers</li>
+        <li>Enhanced privacy protections for members</li>
+        <li>Series LLC option for subsidiary structure</li>
+    </ul>
+    <p><strong>Timing:</strong> Conversion to Delaware LLC should occur after MS employment ends to avoid additional compliance complexity during employment period.</p>
+
+    <h2>Document Retention and Management System</h2>
+    <h3>Architecture</h3>
+    <ul>
+        <li>Primary Storage: AWS S3 with encryption at rest</li>
+        <li>Access Control: Role-based permissions via AWS IAM</li>
+        <li>Version Control: Git for code/technical documents</li>
+        <li>Legal Documents: Separate encrypted vault with audit trail</li>
+    </ul>
+    
+    <h3>Folder Structure</h3>
+    <ul>
+        <li>/governance - Articles, Operating Agreements, Board Minutes</li>
+        <li>/compliance - MS disclosures, regulatory filings</li>
+        <li>/financial - Tax returns, financial statements, banking</li>
+        <li>/legal - Contracts, IP assignments, legal opinions</li>
+        <li>/hr - Employment agreements, benefit plans</li>
+        <li>/technical - Source code, architecture, documentation</li>
+    </ul>
+    
+    <h3>Access Levels</h3>
+    <ul>
+        <li>Level 1 (Full): Patrick Smith, Mike McIntosh (legal only)</li>
+        <li>Level 2 (Financial): Scotty Smith (financial/operational)</li>
+        <li>Level 3 (Technical): Tyler Robinson (technical/product)</li>
+        <li>Level 4 (Read-only): Other family members as needed</li>
+    </ul>
+
     <h2>Recommendations for Implementation</h2>
     <ol>
         <li>Obtain formal written approval from Morgan Stanley compliance for current structure</li>
@@ -215,6 +294,8 @@
         <li>Establish subsidiary formation templates for rapid market entry</li>
         <li>Implement governance calendar and reporting frameworks</li>
         <li>Consider establishing advisory board with independent directors</li>
+        <li>Set up document retention system with appropriate access controls</li>
+        <li>Create transition checklist for Delaware conversion post-MS employment</li>
     </ol>
 
     <div class="legal-notice">
@@ -229,7 +310,7 @@
     <div class="signature">
         <p>Respectfully submitted,</p>
         <p><strong>Patrick Smith</strong><br>
-        Founder, Candlefish AI</p>
+        Managing Member, Candlefish.ai Studio</p>
     </div>
 
     <script>
