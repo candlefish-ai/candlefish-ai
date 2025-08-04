@@ -1,0 +1,218 @@
+# Velero installation configuration
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: velero
+
+---
+# S3 bucket configuration for Velero
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velero-s3-config
+  namespace: velero
+data:
+  bucket: "candlefish-claude-resources-velero"
+  region: "us-west-2"
+  prefix: "cluster-backups"
+
+---
+# Velero backup schedules
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 1 * * *"  # Daily at 1 AM UTC
+  template:
+    includedNamespaces:
+    - claude-resources
+    - monitoring
+    - ingress-nginx
+    excludedResources:
+    - events
+    - events.events.k8s.io
+    - backups.velero.io
+    - restores.velero.io
+    storageLocation: default
+    ttl: 720h0m0s  # 30 days
+    metadata:
+      labels:
+        backup-type: daily
+        environment: production
+
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: weekly-backup
+  namespace: velero
+spec:
+  schedule: "0 3 * * 0"  # Weekly on Sunday at 3 AM UTC
+  template:
+    includedNamespaces:
+    - claude-resources
+    - monitoring
+    - ingress-nginx
+    - kube-system
+    - external-secrets-system
+    excludedResources:
+    - events
+    - events.events.k8s.io
+    - backups.velero.io
+    - restores.velero.io
+    storageLocation: default
+    ttl: 2160h0m0s  # 90 days
+    metadata:
+      labels:
+        backup-type: weekly
+        environment: production
+
+---
+# Backup storage location
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  objectStorage:
+    bucket: candlefish-claude-resources-velero
+    prefix: cluster-backups
+  config:
+    region: us-west-2
+    s3ForcePathStyle: "false"
+
+---
+# Volume snapshot location
+apiVersion: velero.io/v1
+kind: VolumeSnapshotLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  config:
+    region: us-west-2
+
+---
+# Service account for Velero
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: velero
+  namespace: velero
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/VeleroRole
+
+---
+# Disaster recovery restore job
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: disaster-recovery-restore
+  namespace: velero
+spec:
+  template:
+    spec:
+      serviceAccountName: velero
+      restartPolicy: Never
+      containers:
+      - name: restore
+        image: velero/velero:v1.12.0
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -e
+          
+          # Get the latest backup
+          BACKUP_NAME=$(velero backup get --output json | jq -r '.items | sort_by(.status.completionTimestamp) | last | .metadata.name')
+          
+          if [ "$BACKUP_NAME" = "null" ] || [ -z "$BACKUP_NAME" ]; then
+            echo "No backups found!"
+            exit 1
+          fi
+          
+          echo "Restoring from backup: $BACKUP_NAME"
+          
+          # Create restore
+          velero restore create restore-$(date +%Y%m%d-%H%M%S) \
+            --from-backup $BACKUP_NAME \
+            --wait
+          
+          echo "Restore completed successfully"
+        env:
+        - name: VELERO_NAMESPACE
+          value: velero
+        volumeMounts:
+        - name: velero-config
+          mountPath: /etc/velero
+      volumes:
+      - name: velero-config
+        emptyDir: {}
+
+---
+# Pre-backup hook to ensure consistent database state
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-pre-backup-hook
+  namespace: claude-resources
+data:
+  pre-backup.sh: |
+    #!/bin/bash
+    set -e
+    
+    echo "Starting pre-backup database consistency check"
+    
+    # Perform checkpoint to ensure all data is written to disk
+    psql -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB -c "CHECKPOINT;"
+    
+    # Wait for any pending WAL writes
+    sleep 5
+    
+    echo "Pre-backup hook completed successfully"
+
+---
+# Pod with pre-backup hook annotation
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-backup-hook-example
+  namespace: claude-resources
+  annotations:
+    pre.hook.backup.velero.io/command: '["/scripts/pre-backup.sh"]'
+    pre.hook.backup.velero.io/timeout: 30s
+spec:
+  containers:
+  - name: postgres
+    image: postgres:15-alpine
+    env:
+    - name: POSTGRES_HOST
+      value: "postgres"
+    - name: POSTGRES_USER
+      valueFrom:
+        secretKeyRef:
+          name: claude-resources-secrets
+          key: POSTGRES_USER
+    - name: POSTGRES_DB
+      valueFrom:
+        secretKeyRef:
+          name: claude-resources-secrets
+          key: POSTGRES_DB
+    - name: PGPASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: claude-resources-secrets
+          key: POSTGRES_PASSWORD
+    volumeMounts:
+    - name: backup-hooks
+      mountPath: /scripts
+  volumes:
+  - name: backup-hooks
+    configMap:
+      name: postgres-pre-backup-hook
+      defaultMode: 0755

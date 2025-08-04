@@ -1,0 +1,36 @@
+{
+  "Type": "HTTPS",
+  "ResourcePath": "/api/health",
+  "FullyQualifiedDomainName": "paintbox.candlefish.ai",
+  "Port": 443,
+  "RequestInterval": 30,
+  "FailureThreshold": 3,
+  "MeasureLatency": true,
+  "Inverted": false,
+  "Disabled": false,
+  "EnableSNI": true,
+  "Regions": [
+    "us-east-1",
+    "us-west-2",
+    "eu-west-1"
+  ],
+  "AlarmIdentifier": {
+    "Region": "us-east-1",
+    "Name": "paintbox-health-check-alarm"
+  },
+  "InsufficientDataHealthStatus": "Failure",
+  "Tags": [
+    {
+      "Key": "Project",
+      "Value": "Paintbox"
+    },
+    {
+      "Key": "Environment",
+      "Value": "Production"
+    },
+    {
+      "Key": "Component",
+      "Value": "HealthCheck"
+    }
+  ]
+}

@@ -26,7 +26,7 @@ import {
   Home,
   Sparkles,
 } from "lucide-react";
-import { CustomerSearch } from "@/components/ui/CustomerSearch";
+import { CustomerSearch } from "@/components/ui/CustomerSearchFull";
 import { FloatingInput } from "@/components/ui/FloatingInput";
 import { EstimatorDropdown } from "@/components/ui/EstimatorDropdown";
 import { Button } from "@/components/ui/Button";
