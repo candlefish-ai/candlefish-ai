@@ -12,13 +12,22 @@
     "test:e2e": "playwright test",
     "test:performance": "jest --testPathPattern=__tests__/performance",
     "test:all": "npm run test:unit && npm run test:integration && npm run test:performance && npm run test:e2e",
+    "test:phased-deployment": "npm run test:unit -- --testPathPattern=phased && npm run test:integration -- --testPathPattern=phased && npm run test:e2e -- --grep=\"phased|onboarding\"",
+    "test:onboarding": "npm run test:unit -- --testPathPattern=onboarding && npm run test:e2e -- --grep=\"onboarding\"",
+    "test:performance-load": "npm run test:performance -- --testPathPattern=concurrent",
     "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "test:ci-phased": "npm run test:phased-deployment && playwright test --project=phased-deployment-admin,phased-deployment-user",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "lint": "eslint __tests__ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint __tests__ --ext .js,.jsx,.ts,.tsx --fix",
     "setup:test-env": "node __tests__/setup/setup-test-environment.js",
+    "setup:e2e-auth": "playwright test --project=setup-admin-auth,setup-user-auth",
+    "cleanup:e2e-auth": "playwright test --project=cleanup-admin-auth,cleanup-user-auth",
     "clean:coverage": "rimraf coverage",
-    "validate:workflows": "node __tests__/scripts/validate-workflows.js"
+    "validate:workflows": "node __tests__/scripts/validate-workflows.js",
+    "report:coverage": "nyc report --reporter=html --reporter=text",
+    "report:e2e": "playwright show-report",
+    "report:performance": "node __tests__/scripts/generate-performance-report.js"
   },
   "keywords": [
     "claude",

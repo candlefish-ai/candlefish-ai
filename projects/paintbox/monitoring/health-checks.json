@@ -1,0 +1,412 @@
+{
+  "healthChecks": {
+    "application": {
+      "frontend": {
+        "endpoint": "/api/health",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 5000,
+        "interval": 30000,
+        "retries": 3,
+        "checks": [
+          {
+            "name": "database_connection",
+            "description": "Verify database connectivity",
+            "critical": true
+          },
+          {
+            "name": "redis_connection",
+            "description": "Verify Redis cache connectivity",
+            "critical": true
+          },
+          {
+            "name": "secrets_manager",
+            "description": "Verify AWS Secrets Manager access",
+            "critical": true
+          },
+          {
+            "name": "salesforce_api",
+            "description": "Verify Salesforce API connectivity",
+            "critical": false
+          },
+          {
+            "name": "companycam_api",
+            "description": "Verify Company Cam API connectivity",
+            "critical": false
+          }
+        ]
+      },
+      "backend": {
+        "endpoint": "/health",
+        "method": "GET",
+        "expectedStatus": 200,
+        "timeout": 5000,
+        "interval": 30000,
+        "retries": 3,
+        "checks": [
+          {
+            "name": "server_status",
+            "description": "Basic server health",
+            "critical": true
+          },
+          {
+            "name": "memory_usage",
+            "description": "Check memory usage below 90%",
+            "critical": true,
+            "threshold": 90
+          },
+          {
+            "name": "cpu_usage",
+            "description": "Check CPU usage below 80%",
+            "critical": true,
+            "threshold": 80
+          }
+        ]
+      }
+    },
+    "infrastructure": {
+      "database": {
+        "endpoint": "rds-health-check",
+        "checks": [
+          {
+            "name": "connection_count",
+            "description": "Monitor active connections",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "cpu_utilization",
+            "description": "Database CPU usage",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "free_storage_space",
+            "description": "Available storage space",
+            "threshold": 20,
+            "unit": "percent"
+          },
+          {
+            "name": "read_latency",
+            "description": "Database read latency",
+            "threshold": 0.2,
+            "unit": "seconds"
+          },
+          {
+            "name": "write_latency",
+            "description": "Database write latency",
+            "threshold": 0.2,
+            "unit": "seconds"
+          }
+        ]
+      },
+      "redis": {
+        "endpoint": "redis-health-check",
+        "checks": [
+          {
+            "name": "memory_usage",
+            "description": "Redis memory utilization",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "cpu_utilization",
+            "description": "Redis CPU usage",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "cache_hit_rate",
+            "description": "Cache hit rate",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "evicted_keys",
+            "description": "Number of evicted keys",
+            "threshold": 100,
+            "unit": "count"
+          }
+        ]
+      },
+      "loadBalancer": {
+        "endpoint": "alb-health-check",
+        "checks": [
+          {
+            "name": "healthy_hosts",
+            "description": "Number of healthy targets",
+            "threshold": 1,
+            "unit": "count"
+          },
+          {
+            "name": "response_time",
+            "description": "Average response time",
+            "threshold": 1.0,
+            "unit": "seconds"
+          },
+          {
+            "name": "error_rate",
+            "description": "HTTP 5xx error rate",
+            "threshold": 5,
+            "unit": "percent"
+          },
+          {
+            "name": "request_count",
+            "description": "Requests per minute",
+            "threshold": 1000,
+            "unit": "count"
+          }
+        ]
+      }
+    },
+    "security": {
+      "secrets": {
+        "checks": [
+          {
+            "name": "secrets_access",
+            "description": "Verify secrets can be retrieved",
+            "critical": true
+          },
+          {
+            "name": "kms_access",
+            "description": "Verify KMS key access",
+            "critical": true
+          },
+          {
+            "name": "secret_rotation_age",
+            "description": "Check if secrets are rotated regularly",
+            "threshold": 90,
+            "unit": "days"
+          }
+        ]
+      },
+      "certificates": {
+        "checks": [
+          {
+            "name": "ssl_expiry",
+            "description": "SSL certificate expiration",
+            "threshold": 30,
+            "unit": "days"
+          },
+          {
+            "name": "ssl_validity",
+            "description": "SSL certificate validity",
+            "critical": true
+          }
+        ]
+      }
+    },
+    "external": {
+      "salesforce": {
+        "endpoint": "/api/external/salesforce/health",
+        "method": "GET",
+        "timeout": 10000,
+        "checks": [
+          {
+            "name": "authentication",
+            "description": "Salesforce OAuth token validity",
+            "critical": false
+          },
+          {
+            "name": "api_limits",
+            "description": "Salesforce API limit usage",
+            "threshold": 80,
+            "unit": "percent"
+          },
+          {
+            "name": "response_time",
+            "description": "Salesforce API response time",
+            "threshold": 2.0,
+            "unit": "seconds"
+          }
+        ]
+      },
+      "companycam": {
+        "endpoint": "/api/external/companycam/health",
+        "method": "GET",
+        "timeout": 10000,
+        "checks": [
+          {
+            "name": "api_access",
+            "description": "Company Cam API accessibility",
+            "critical": false
+          },
+          {
+            "name": "response_time",
+            "description": "Company Cam API response time",
+            "threshold": 3.0,
+            "unit": "seconds"
+          }
+        ]
+      }
+    }
+  },
+  "alerting": {
+    "critical": {
+      "channels": ["email", "slack", "pagerduty"],
+      "escalation": {
+        "level1": {
+          "delay": 0,
+          "channels": ["slack"]
+        },
+        "level2": {
+          "delay": 300,
+          "channels": ["email", "slack"]
+        },
+        "level3": {
+          "delay": 900,
+          "channels": ["pagerduty"]
+        }
+      }
+    },
+    "warning": {
+      "channels": ["slack"],
+      "escalation": {
+        "level1": {
+          "delay": 0,
+          "channels": ["slack"]
+        },
+        "level2": {
+          "delay": 1800,
+          "channels": ["email"]
+        }
+      }
+    }
+  },
+  "dashboards": {
+    "operational": {
+      "name": "Paintbox Operational Dashboard",
+      "widgets": [
+        {
+          "type": "metric",
+          "title": "Application Health",
+          "metrics": ["application.health.status"]
+        },
+        {
+          "type": "metric",
+          "title": "Response Time",
+          "metrics": ["application.response_time.avg"]
+        },
+        {
+          "type": "metric",
+          "title": "Error Rate",
+          "metrics": ["application.error_rate"]
+        },
+        {
+          "type": "metric",
+          "title": "Database Connections",
+          "metrics": ["database.connections.active"]
+        },
+        {
+          "type": "metric",
+          "title": "Redis Memory",
+          "metrics": ["redis.memory.usage"]
+        },
+        {
+          "type": "log",
+          "title": "Recent Errors",
+          "logGroup": "/aws/paintbox/app-staging",
+          "filter": "[timestamp, requestId, level=\"ERROR\", ...]"
+        }
+      ]
+    },
+    "security": {
+      "name": "Paintbox Security Dashboard",
+      "widgets": [
+        {
+          "type": "metric",
+          "title": "WAF Blocked Requests",
+          "metrics": ["waf.blocked.count"]
+        },
+        {
+          "type": "metric",
+          "title": "Failed Authentication Attempts",
+          "metrics": ["auth.failed.count"]
+        },
+        {
+          "type": "metric",
+          "title": "Secrets Access",
+          "metrics": ["secrets.access.success", "secrets.access.failure"]
+        },
+        {
+          "type": "metric",
+          "title": "Certificate Expiry",
+          "metrics": ["certificates.expiry.days"]
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "healthCheckPhases": [
+      {
+        "name": "pre_deployment",
+        "description": "Health checks before deployment starts",
+        "checks": [
+          "infrastructure.database",
+          "infrastructure.redis",
+          "security.secrets"
+        ],
+        "timeout": 300,
+        "required": true
+      },
+      {
+        "name": "post_deployment",
+        "description": "Health checks after new version is deployed",
+        "checks": [
+          "application.frontend",
+          "application.backend"
+        ],
+        "timeout": 600,
+        "required": true
+      },
+      {
+        "name": "traffic_switch",
+        "description": "Health checks before switching traffic",
+        "checks": [
+          "application.frontend",
+          "infrastructure.loadBalancer"
+        ],
+        "timeout": 300,
+        "required": true
+      },
+      {
+        "name": "post_traffic_switch",
+        "description": "Health checks after traffic switch",
+        "checks": [
+          "application.frontend",
+          "application.backend",
+          "external.salesforce",
+          "external.companycam"
+        ],
+        "timeout": 600,
+        "required": false
+      }
+    ],
+    "rollbackTriggers": [
+      {
+        "name": "high_error_rate",
+        "condition": "error_rate > 10%",
+        "duration": 300,
+        "action": "rollback"
+      },
+      {
+        "name": "health_check_failure",
+        "condition": "health_check_failure_count >= 3",
+        "duration": 180,
+        "action": "rollback"
+      },
+      {
+        "name": "response_time_degradation",
+        "condition": "response_time > 5s",
+        "duration": 300,
+        "action": "rollback"
+      },
+      {
+        "name": "database_connection_failure",
+        "condition": "database_connection_success < 90%",
+        "duration": 120,
+        "action": "rollback"
+      }
+    ]
+  }
+}

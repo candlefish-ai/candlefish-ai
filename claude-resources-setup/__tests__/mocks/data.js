@@ -1,4 +1,4 @@
-// Mock data for testing
+// Mock data for testing - Phased Deployment System
 export const mockRepositories = [
   {
     id: 'repo-1',
@@ -258,5 +258,297 @@ export const mockDeploymentActions = [
     status: 'completed',
     lastRun: '2025-01-04T10:30:00Z',
     estimatedDuration: 15
+  }
+]
+
+// Phased Deployment Mock Data
+export const mockPhases = [
+  {
+    id: 'phase-1',
+    name: 'Leadership Onboarding',
+    description: 'Initial rollout to team leaders and managers',
+    status: 'completed',
+    startDate: '2025-01-01T00:00:00Z',
+    endDate: '2025-01-07T23:59:59Z',
+    targetUsers: ['user-1', 'user-2', 'user-3'],
+    completedUsers: ['user-1', 'user-2', 'user-3'],
+    successCriteria: {
+      minCompletionRate: 90,
+      maxErrorRate: 5,
+      targetDuration: 7
+    },
+    metrics: {
+      completionRate: 100,
+      errorRate: 0,
+      avgOnboardingTime: 2.5,
+      userSatisfaction: 4.8
+    }
+  },
+  {
+    id: 'phase-2',
+    name: 'Development Team',
+    description: 'Rollout to core development team members',
+    status: 'in_progress',
+    startDate: '2025-01-08T00:00:00Z',
+    endDate: '2025-01-21T23:59:59Z',
+    targetUsers: ['user-4', 'user-5', 'user-6', 'user-7', 'user-8'],
+    completedUsers: ['user-4', 'user-5'],
+    successCriteria: {
+      minCompletionRate: 85,
+      maxErrorRate: 10,
+      targetDuration: 14
+    },
+    metrics: {
+      completionRate: 40,
+      errorRate: 5,
+      avgOnboardingTime: 3.2,
+      userSatisfaction: 4.6
+    }
+  },
+  {
+    id: 'phase-3',
+    name: 'Extended Team',
+    description: 'Rollout to extended team and stakeholders',
+    status: 'pending',
+    startDate: '2025-01-22T00:00:00Z',
+    endDate: '2025-02-05T23:59:59Z',
+    targetUsers: ['user-9', 'user-10', 'user-11', 'user-12'],
+    completedUsers: [],
+    successCriteria: {
+      minCompletionRate: 80,
+      maxErrorRate: 15,
+      targetDuration: 14
+    },
+    metrics: {
+      completionRate: 0,
+      errorRate: 0,
+      avgOnboardingTime: 0,
+      userSatisfaction: 0
+    }
+  }
+]
+
+export const mockDeployments = [
+  {
+    id: 'deployment-1',
+    name: 'Q1 2025 Claude Resources Rollout',
+    description: 'Phased deployment of Claude resources to entire organization',
+    status: 'in_progress',
+    currentPhase: 'phase-2',
+    phases: mockPhases,
+    createdAt: '2024-12-15T00:00:00Z',
+    updatedAt: '2025-01-04T10:30:00Z',
+    createdBy: 'admin-user',
+    metadata: {
+      version: '2.1.0',
+      rollbackPlan: 'automatic',
+      approvalRequired: true
+    }
+  }
+]
+
+export const mockUsers = [
+  {
+    id: 'user-1',
+    username: 'alice-johnson',
+    email: 'alice@candlefish.ai',
+    role: 'team_lead',
+    department: 'Engineering',
+    onboardingStatus: {
+      phase: 'phase-1',
+      status: 'completed',
+      progress: 100,
+      startedAt: '2025-01-01T09:00:00Z',
+      completedAt: '2025-01-02T15:30:00Z',
+      currentStep: 'completed',
+      steps: [
+        {
+          id: 'step-1',
+          name: 'Account Setup',
+          status: 'completed',
+          completedAt: '2025-01-01T09:30:00Z'
+        },
+        {
+          id: 'step-2',
+          name: 'Claude Desktop Installation',
+          status: 'completed',
+          completedAt: '2025-01-01T10:15:00Z'
+        },
+        {
+          id: 'step-3',
+          name: 'Repository Access Configuration',
+          status: 'completed',
+          completedAt: '2025-01-02T14:00:00Z'
+        },
+        {
+          id: 'step-4',
+          name: 'First Successful Sync',
+          status: 'completed',
+          completedAt: '2025-01-02T15:30:00Z'
+        }
+      ]
+    }
+  },
+  {
+    id: 'user-4',
+    username: 'bob-smith',
+    email: 'bob@candlefish.ai',
+    role: 'developer',
+    department: 'Engineering',
+    onboardingStatus: {
+      phase: 'phase-2',
+      status: 'in_progress',
+      progress: 75,
+      startedAt: '2025-01-08T09:00:00Z',
+      currentStep: 'step-4',
+      steps: [
+        {
+          id: 'step-1',
+          name: 'Account Setup',
+          status: 'completed',
+          completedAt: '2025-01-08T09:30:00Z'
+        },
+        {
+          id: 'step-2',
+          name: 'Claude Desktop Installation',
+          status: 'completed',
+          completedAt: '2025-01-08T10:15:00Z'
+        },
+        {
+          id: 'step-3',
+          name: 'Repository Access Configuration',
+          status: 'completed',
+          completedAt: '2025-01-09T14:00:00Z'
+        },
+        {
+          id: 'step-4',
+          name: 'First Successful Sync',
+          status: 'in_progress',
+          startedAt: '2025-01-10T09:00:00Z'
+        }
+      ]
+    }
+  }
+]
+
+export const mockMetrics = {
+  adoption: {
+    totalUsers: 50,
+    onboardedUsers: 23,
+    activeUsers: 18,
+    completionRate: 78,
+    avgOnboardingTime: 2.8,
+    phaseBreakdown: {
+      'phase-1': { completed: 3, total: 3, rate: 100 },
+      'phase-2': { completed: 2, total: 5, rate: 40 },
+      'phase-3': { completed: 0, total: 4, rate: 0 }
+    },
+    departmentBreakdown: {
+      'Engineering': { completed: 15, total: 20, rate: 75 },
+      'Product': { completed: 5, total: 8, rate: 62.5 },
+      'Design': { completed: 3, total: 5, rate: 60 }
+    },
+    timeToValue: {
+      avg: 1.5,
+      median: 1.2,
+      p90: 2.8,
+      p95: 3.5
+    }
+  }
+}
+
+export const mockFeedback = [
+  {
+    id: 'feedback-1',
+    userId: 'user-1',
+    type: 'rating',
+    category: 'onboarding_experience',
+    rating: 5,
+    comment: 'The onboarding process was smooth and well-guided. Great job!',
+    submittedAt: '2025-01-02T16:00:00Z',
+    phase: 'phase-1',
+    step: 'completed'
+  },
+  {
+    id: 'feedback-2',
+    userId: 'user-4',
+    type: 'issue',
+    category: 'technical_difficulty',
+    severity: 'medium',
+    title: 'Repository sync taking longer than expected',
+    description: 'The initial sync is taking over 10 minutes. Is this normal?',
+    submittedAt: '2025-01-10T11:30:00Z',
+    phase: 'phase-2',
+    step: 'step-4',
+    status: 'acknowledged'
+  }
+]
+
+export const mockWeeklyReports = [
+  {
+    id: 'report-2025-w01',
+    week: '2025-W01',
+    startDate: '2025-01-01T00:00:00Z',
+    endDate: '2025-01-07T23:59:59Z',
+    summary: {
+      newOnboardings: 3,
+      completedOnboardings: 3,
+      activeIssues: 0,
+      avgSatisfactionRating: 4.8,
+      milestones: ['Phase 1 completed successfully']
+    },
+    metrics: {
+      userProgress: {
+        started: 3,
+        inProgress: 0,
+        completed: 3,
+        dropped: 0
+      },
+      timeToCompletion: {
+        avg: 2.5,
+        min: 1.8,
+        max: 3.2
+      },
+      issueBreakdown: {
+        technical: 0,
+        documentation: 0,
+        access: 0,
+        other: 0
+      }
+    },
+    generatedAt: '2025-01-08T00:00:00Z'
+  },
+  {
+    id: 'report-2025-w02',
+    week: '2025-W02',
+    startDate: '2025-01-08T00:00:00Z',
+    endDate: '2025-01-14T23:59:59Z',
+    summary: {
+      newOnboardings: 5,
+      completedOnboardings: 2,
+      activeIssues: 1,
+      avgSatisfactionRating: 4.6,
+      milestones: ['Phase 2 started', '40% completion rate achieved']
+    },
+    metrics: {
+      userProgress: {
+        started: 5,
+        inProgress: 3,
+        completed: 2,
+        dropped: 0
+      },
+      timeToCompletion: {
+        avg: 3.2,
+        min: 2.1,
+        max: 4.5
+      },
+      issueBreakdown: {
+        technical: 1,
+        documentation: 0,
+        access: 0,
+        other: 0
+      }
+    },
+    generatedAt: '2025-01-15T00:00:00Z'
   }
 ]
