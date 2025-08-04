@@ -1,0 +1,244 @@
+# Artillery Load Testing Configuration for Security Endpoints
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Warmup"
+    - duration: 120
+      arrivalRate: 20
+      name: "Ramp up load"
+    - duration: 180
+      arrivalRate: 50
+      name: "Sustained load"
+    - duration: 60
+      arrivalRate: 100
+      name: "Spike test"
+    - duration: 60
+      arrivalRate: 10
+      name: "Cool down"
+  
+  # Global configuration
+  timeout: 30
+  
+  # Headers to include in all requests
+  defaults:
+    headers:
+      'Content-Type': 'application/json'
+      'User-Agent': 'Artillery-LoadTest/1.0'
+  
+  # Variables for dynamic testing
+  variables:
+    authToken:
+      - "Bearer test-token-1"
+      - "Bearer test-token-2"
+      - "Bearer test-token-3"
+    maliciousPayload:
+      - "'; DROP TABLE users; --"
+      - "<script>alert('xss')</script>"
+      - "$(rm -rf /)"
+      - "../../../etc/passwd"
+
+  # Rate limiting configuration
+  pool: 10 # connection pool size
+  
+  # TLS configuration
+  tls:
+    rejectUnauthorized: false # For testing with self-signed certs
+
+scenarios:
+  # Test 1: Authentication endpoint load testing
+  - name: "Authentication Load Test"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/v1/secrets/token"
+          json:
+            clientId: "load-test-client"
+            clientSecret: "load-test-secret"
+            scope: "read:secrets"
+          capture:
+            - json: "$.accessToken"
+              as: "accessToken"
+          expect:
+            - statusCode: [200, 401, 429] # Accept auth success, failure, or rate limiting
+      
+      # Follow up with authenticated request if successful
+      - get:
+          url: "/api/v1/secrets/config"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+          ifTrue: "accessToken"
+          expect:
+            - statusCode: [200, 401, 403]
+
+  # Test 2: Service status monitoring under load
+  - name: "Service Status Monitoring"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/v1/services/salesforce/status"
+          headers:
+            Authorization: "{{ authToken }}"
+          expect:
+            - statusCode: [200, 401, 429, 503]
+      
+      - get:
+          url: "/api/v1/services/companycam/status"
+          headers:
+            Authorization: "{{ authToken }}"
+          expect:
+            - statusCode: [200, 401, 429, 503]
+
+  # Test 3: Audit log retrieval performance
+  - name: "Audit Log Performance"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/v1/audit/events"
+          headers:
+            Authorization: "{{ authToken }}"
+          qs:
+            limit: 50
+            page: "{{ $randomInt(1, 10) }}"
+            service: "{{ $pick(['salesforce', 'companycam', 'all']) }}"
+          expect:
+            - statusCode: [200, 401, 403, 429]
+      
+      # Test search functionality
+      - get:
+          url: "/api/v1/audit/events"
+          headers:
+            Authorization: "{{ authToken }}"
+          qs:
+            search: "login"
+            limit: 25
+          expect:
+            - statusCode: [200, 401, 403, 429]
+
+  # Test 4: Security endpoint injection testing
+  - name: "Security Injection Tests"
+    weight: 15
+    flow:
+      # Test SQL injection on token endpoint
+      - post:
+          url: "/api/v1/secrets/token"
+          json:
+            clientId: "{{ maliciousPayload }}"
+            clientSecret: "test-secret"
+            scope: "read"
+          expect:
+            - statusCode: [400, 401, 403] # Should reject malicious input
+      
+      # Test XSS on search endpoint
+      - get:
+          url: "/api/v1/audit/events"
+          headers:
+            Authorization: "{{ authToken }}"
+          qs:
+            search: "{{ maliciousPayload }}"
+          expect:
+            - statusCode: [200, 400, 403] # Should sanitize or reject
+
+  # Test 5: Rate limiting validation
+  - name: "Rate Limiting Tests"
+    weight: 15
+    flow:
+      # Make rapid requests to trigger rate limiting
+      - loop:
+          count: 15
+          over:
+            - post:
+                url: "/api/v1/secrets/token"
+                json:
+                  clientId: "rate-limit-test"
+                  clientSecret: "test-secret"
+                  scope: "read"
+                expect:
+                  - statusCode: [200, 401, 429] # Eventually should hit rate limit
+      
+      # Verify rate limiting headers are present
+      - get:
+          url: "/api/v1/secrets/config"
+          headers:
+            Authorization: "{{ authToken }}"
+          capture:
+            - header: "X-RateLimit-Remaining"
+              as: "rateLimitRemaining"
+            - header: "Retry-After"
+              as: "retryAfter"
+
+# Define custom functions for testing
+engines:
+  http:
+    # Custom request processing
+    beforeRequest: |
+      function(requestParams, context, ee, next) {
+        // Add timestamp to identify requests
+        requestParams.headers['X-Test-Timestamp'] = Date.now();
+        
+        // Add random user agent variations
+        const userAgents = [
+          'Artillery-Security-Test/1.0',
+          'Mozilla/5.0 (Security Test)',
+          'Penetration-Test-Bot/1.0'
+        ];
+        requestParams.headers['User-Agent'] = userAgents[Math.floor(Math.random() * userAgents.length)];
+        
+        return next();
+      }
+    
+    # Custom response processing
+    afterResponse: |
+      function(requestParams, response, context, ee, next) {
+        // Log security-relevant response headers  
+        const securityHeaders = [
+          'x-frame-options',
+          'x-content-type-options', 
+          'x-xss-protection',
+          'content-security-policy',
+          'x-ratelimit-remaining'
+        ];
+        
+        securityHeaders.forEach(header => {
+          if (response.headers[header]) {
+            console.log(`${header}: ${response.headers[header]}`);
+          }
+        });
+        
+        // Track performance metrics
+        const responseTime = response.timings.phases.total;
+        if (responseTime > 2000) {
+          console.warn(`Slow response: ${requestParams.url} took ${responseTime}ms`);
+        }
+        
+        return next();
+      }
+
+# Performance thresholds and SLA definitions
+expect:
+  # Response time expectations
+  p95: 1500  # 95th percentile should be under 1.5 seconds
+  p99: 3000  # 99th percentile should be under 3 seconds
+  
+  # Error rate expectations  
+  maxErrorRate: 5  # Maximum 5% error rate
+  
+  # Throughput expectations
+  minRps: 30  # Should handle at least 30 requests per second
+
+# Plugins for enhanced reporting
+plugins:
+  expect: {}
+  metrics-by-endpoint: {}
+  
+# Custom metrics collection
+metrics:
+  - name: "security_violations"
+    unit: "count"
+    
+  - name: "rate_limit_hits" 
+    unit: "count"
+    
+  - name: "injection_attempts_blocked"
+    unit: "count"

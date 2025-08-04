@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft, Home, Plus, Minus, Camera, Save } from 'lucide-react';
 import { animated, useSpring, useTrail } from '@react-spring/web';
 import { useEstimateStore } from '@/stores/useEstimateStore';
+import { CompanyCamGallery } from '@/components/ui/CompanyCamGallery';
 
 interface Surface {
   id: string;
@@ -194,16 +195,15 @@ export default function ExteriorMeasurementPage() {
           </div>
 
           <div className="paintbox-card p-6 mb-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-paintbox-text">Total Exterior Area</h3>
                 <p className="text-2xl font-bold paintbox-gradient-text">{totalSqft} sq ft</p>
               </div>
-              <button className="paintbox-btn paintbox-btn-secondary">
-                <Camera className="w-4 h-4" />
-                Add Photos
-              </button>
             </div>
+            
+            {/* CompanyCam Gallery */}
+            <CompanyCamGallery />
           </div>
 
           <div className="flex justify-between">

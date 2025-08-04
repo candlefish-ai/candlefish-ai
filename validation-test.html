@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candlefish AI - JavaScript Validation Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #00CED1; }
+        .test { margin: 10px 0; }
+        .pass { color: #0f0; }
+        .fail { color: #f00; }
+        .info { color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>Candlefish AI - Sprint Validation Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        const tests = [];
+        
+        function addTest(name, result, details = '') {
+            const div = document.createElement('div');
+            div.className = 'test ' + (result ? 'pass' : 'fail');
+            div.innerHTML = `${result ? '✓' : '✗'} ${name}${details ? ': ' + details : ''}`;
+            results.appendChild(div);
+            tests.push({ name, result, details });
+        }
+        
+        // Test 1: Check if site is accessible
+        fetch('https://candlefish.ai')
+            .then(res => {
+                addTest('Site accessibility', res.ok, `Status: ${res.status}`);
+                return res.text();
+            })
+            .then(html => {
+                // Test 2: Check for logo in HTML
+                const hasLogo = html.includes('/logo/candlefish_highquality.png');
+                addTest('Logo reference in HTML', hasLogo);
+                
+                // Test 3: Check for JavaScript animations
+                const hasParticles = html.includes('initializeParticles');
+                addTest('Particle system JavaScript', hasParticles);
+                
+                // Test 4: Check for GSAP
+                const hasGSAP = html.includes('gsap.min.js');
+                addTest('GSAP animation library', hasGSAP);
+                
+                // Test 5: Check for loading overlay
+                const hasLoading = html.includes('loading-overlay');
+                addTest('Loading overlay', hasLoading);
+            });
+        
+        // Test 6: Check logo availability
+        fetch('https://candlefish.ai/logo/candlefish_highquality.png')
+            .then(res => {
+                addTest('Logo file accessibility', res.ok, `Status: ${res.status}`);
+            });
+        
+        // Test 7: Check WebP logo
+        fetch('https://candlefish.ai/logo/candlefish_highquality.webp')
+            .then(res => {
+                addTest('WebP logo accessibility', res.ok, `Status: ${res.status}`);
+            });
+        
+        // Test 8: Check external dependencies
+        Promise.all([
+            fetch('https://unpkg.com/@lottiefiles/lottie-player@2.0.2/dist/lottie-player.js', { method: 'HEAD' }),
+            fetch('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js', { method: 'HEAD' }),
+            fetch('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js', { method: 'HEAD' })
+        ]).then(responses => {
+            const allOk = responses.every(res => res.ok);
+            addTest('External JavaScript dependencies', allOk, 
+                `Lottie: ${responses[0].status}, GSAP: ${responses[1].status}, ScrollTrigger: ${responses[2].status}`);
+        });
+        
+        // Summary after all tests complete
+        setTimeout(() => {
+            const passed = tests.filter(t => t.result).length;
+            const total = tests.length;
+            const summary = document.createElement('div');
+            summary.className = 'info';
+            summary.style.marginTop = '20px';
+            summary.innerHTML = `<h2>Summary: ${passed}/${total} tests passed</h2>`;
+            results.appendChild(summary);
+        }, 3000);
+    </script>
+</body>
+</html>

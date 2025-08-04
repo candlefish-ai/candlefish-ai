@@ -1,20 +1,29 @@
-[build]
-  publish = "."
+# ************************************************
+# Netlify TOML Configuration - Monorepo Root
+# ************************************************
 
+# This is the root configuration for the monorepo
+# Individual apps have their own netlify.toml files
+
+[build]
+  # Default to the website app
+  base = "apps/website"
+  publish = "dist"
+  command = "pnpm install && pnpm build"
+
+# Redirect root domain to website app
 [[redirects]]
   from = "/*"
-  to = "/404.html"
-  status = 404
+  to = "https://candlefish.ai/:splat"
+  status = 200
+  force = false
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+# Context-specific configurations
+[context.production]
+  environment = { NODE_ENV = "production" }
 
-[[headers]]
-  for = "/logo/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+[context.deploy-preview]
+  environment = { NODE_ENV = "development" }
+
+[context.branch-deploy]
+  environment = { NODE_ENV = "development" }
