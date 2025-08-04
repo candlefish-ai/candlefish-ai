@@ -1,6 +1,6 @@
 [build]
   publish = "dist"
-  command = "npm install --legacy-peer-deps && npm run build"
+  # command temporarily disabled for manual deployment
   environment = { NODE_VERSION = "18" }
 
 [[headers]]
