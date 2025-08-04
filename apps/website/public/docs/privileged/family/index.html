@@ -143,7 +143,7 @@
 <body>
     <div class="letterhead">
         <div class="logo-container">
-            <img src="candlefish_highquality_original.png" alt="Candlefish AI Logo">
+            <img src="./candlefish_highquality_original.png" alt="Candlefish AI Logo" onerror="this.src='images/candlefish_highquality.png'">
         </div>
         <div class="company-info">
             <div class="company-name">CANDLEFISH AI</div>
@@ -162,6 +162,20 @@
             <input type="password" id="password" placeholder="Enter authorization code" autofocus>
             <button onclick="checkPassword()">Access Document</button>
         </div>
+        
+        <div class="auth-container" id="documentSelection" style="display: none;">
+            <div class="confidential-notice">
+                AUTHORIZED ACCESS GRANTED
+            </div>
+            <h2>Select Document</h2>
+            <p>Please select which document you would like to view:</p>
+            <button onclick="window.location.href='candlefish_update_08032025_family.html'" style="margin-bottom: 15px;">
+                Family Communication Letter
+            </button>
+            <button onclick="window.location.href='candlefish_update_08032025_legal.html'">
+                Legal Structure Document
+            </button>
+        </div>
     </div>
 
     <div class="footer">
@@ -175,7 +189,8 @@
             
             if (password === 'candlefish') {
                 sessionStorage.setItem('family-letter-auth', 'true');
-                window.location.href = 'candlefish_update_08032025_family.html';
+                // Show document selection instead of auto-redirect
+                showDocumentSelection();
             } else {
                 error.style.display = 'block';
                 document.getElementById('password').value = '';
@@ -185,9 +200,14 @@
             }
         }
         
+        function showDocumentSelection() {
+            document.getElementById('authForm').style.display = 'none';
+            document.getElementById('documentSelection').style.display = 'block';
+        }
+        
         // Check if already authenticated
         if (sessionStorage.getItem('family-letter-auth') === 'true') {
-            window.location.href = 'candlefish_update_08032025_family.html';
+            showDocumentSelection();
         }
         
         // Enter key support
