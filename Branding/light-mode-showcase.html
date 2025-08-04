@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candlefish AI - Light Mode Design System</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Color System - Light Mode */
+        :root {
+            /* Core Colors */
+            --black: #000000;
+            --white: #ffffff;
+            --teal: #00CED1;
+            --teal-dark: #008B8D;
+            --teal-light: #40E0D0;
+            --teal-50: #E0FFFF;
+            
+            /* Light Mode Specific */
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-tertiary: #f5f5f5;
+            --text-primary: #000000;
+            --text-secondary: #525252;
+            --text-tertiary: #71717a;
+            --border: #e5e5e5;
+            --border-dark: #d4d4d8;
+            
+            /* Semantic Colors */
+            --surface: #ffffff;
+            --surface-hover: #fafafa;
+            --surface-active: #f5f5f5;
+            --overlay: rgba(0, 0, 0, 0.05);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            
+            /* Gradients */
+            --gradient-subtle: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            --gradient-teal: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+        }
+
+        /* Dark Mode (for comparison) */
+        .dark {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #171717;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+            --border: #27272a;
+            --border-dark: #3f3f46;
+            --surface: #0a0a0a;
+            --surface-hover: #171717;
+            --surface-active: #27272a;
+            --overlay: rgba(255, 255, 255, 0.05);
+            --shadow-color: rgba(0, 206, 209, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .header .accent {
+            color: var(--teal);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Example */
+        .nav-example {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+            background: var(--bg-primary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--teal);
+            color: var(--white);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--teal);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 4rem;
+            background: var(--gradient-subtle);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--teal) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--teal);
+            color: var(--teal);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            background: var(--bg-primary);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .button {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button-primary {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        .button-primary:hover {
+            background: var(--teal-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 206, 209, 0.3);
+        }
+
+        .button-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .button-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .button-outline {
+            background: transparent;
+            color: var(--teal);
+            border: 1px solid var(--teal);
+        }
+
+        .button-outline:hover {
+            background: var(--teal);
+            color: var(--white);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px var(--shadow-color);
+            border-color: var(--teal);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--teal);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Color Palette Display */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .color-swatch {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+        }
+
+        .color-preview {
+            height: 100px;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .color-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .color-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Form Elements */
+        .form-example {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(0, 206, 209, 0.1);
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--teal);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* Comparison Section */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .comparison-side {
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .comparison-side.light-demo {
+            background: var(--white);
+            border: 1px solid var(--border);
+        }
+
+        .comparison-side.dark-demo {
+            background: var(--black);
+            color: var(--white);
+            border: 1px solid #27272a;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="toggle-container">
+        <div class="toggle">
+            <span>☀️</span>
+            <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+            <span>🌙</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Candlefish AI <span class="accent">Light Mode</span></h1>
+            <p>
+                Our design system adapts seamlessly between light and dark themes while maintaining
+                brand consistency and accessibility standards.
+            </p>
+        </header>
+
+        <!-- Navigation Example -->
+        <div class="nav-example">
+            <nav class="nav">
+                <div class="logo">
+                    <div class="logo-icon">C</div>
+                    <span>CANDLEFISH</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#">What We Do</a>
+                    <a href="#">How It Works</a>
+                    <a href="#">Active Pilots</a>
+                    <a href="#">Contact</a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="badge">VALIDATION PHASE</div>
+            <h1>Illuminating the path to<br><span class="accent">AI transformation</span></h1>
+            <p>
+                We turn your slowest business processes into your fastest competitive 
+                advantages through discrete, composable AI modules.
+            </p>
+            <div class="button-group">
+                <button class="button button-primary">Explore Partnership →</button>
+                <button class="button button-outline">View Case Studies</button>
+            </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Light Mode Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #ffffff;"></div>
+                    <div class="color-name">Background</div>
+                    <div class="color-value">#ffffff</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #fafafa;"></div>
+                    <div class="color-name">Surface</div>
+                    <div class="color-value">#fafafa</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #00CED1;"></div>
+                    <div class="color-name">Primary Teal</div>
+                    <div class="color-value">#00CED1</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #000000;"></div>
+                    <div class="color-name">Text Primary</div>
+                    <div class="color-value">#000000</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #525252;"></div>
+                    <div class="color-name">Text Secondary</div>
+                    <div class="color-value">#525252</div>
+                </div>
+                <div class="color-swatch">
+                    <div class="color-preview" style="background: #e5e5e5;"></div>
+                    <div class="color-name">Border</div>
+                    <div class="color-value">#e5e5e5</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cards Example -->
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Feature Cards</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>AI Analysis</h3>
+                    <p>Deep learning models analyze your workflows to identify optimization opportunities</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Instant Deploy</h3>
+                    <p>Modular architecture enables deployment in days, not months</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📈</div>
+                    <h3>Scale Infinitely</h3>
+                    <p>Start with one process, expand across your entire organization</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics -->
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Key Metrics</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-value">10x</div>
+                    <div class="metric-label">Process Speed</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">90</div>
+                    <div class="metric-label">Days to ROI</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">99.9%</div>
+                    <div class="metric-label">Uptime SLA</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">24/7</div>
+                    <div class="metric-label">Support</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Example -->
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Form Elements</h2>
+            <div class="form-example">
+                <div class="form-group">
+                    <label class="form-label">Company Name</label>
+                    <input type="text" class="form-input" placeholder="Enter your company name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" placeholder="contact@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-input" rows="4" placeholder="Tell us about your AI transformation goals"></textarea>
+                </div>
+                <button class="button button-primary" style="width: 100%;">Send Message</button>
+            </div>
+        </section>
+
+        <!-- Theme Comparison -->
+        <section>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Theme Comparison</h2>
+            <div class="comparison">
+                <div class="comparison-side light-demo">
+                    <h3>Light Mode</h3>
+                    <p style="color: #525252;">Clean and professional for daytime use</p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge">ACTIVE</span>
+                    </div>
+                </div>
+                <div class="comparison-side dark-demo">
+                    <h3>Dark Mode</h3>
+                    <p style="color: #a1a1aa;">Reduced eye strain for extended use</p>
+                    <div style="margin-top: 1rem;">
+                        <span class="badge" style="border-color: #00CED1; color: #00CED1;">AVAILABLE</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
+                <div class="logo-icon">C</div>
+                <span>CANDLEFISH AI</span>
+            </div>
+            <p>© 2025 Candlefish AI. Illuminating Intelligence.</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            
+            if (html.classList.contains('light')) {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                toggle.classList.add('active');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                toggle.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
