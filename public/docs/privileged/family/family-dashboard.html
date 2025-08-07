@@ -73,21 +73,38 @@
         
         .new-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(45deg, #10b981, #059669);
             color: white;
-            padding: 5px 12px;
+            padding: 8px 20px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
+            transform: rotate(12deg);
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
             animation: pulse 2s infinite;
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1) rotate(12deg); }
+            50% { transform: scale(1.05) rotate(12deg); }
+            100% { transform: scale(1) rotate(12deg); }
+        }
+        
+        .archived-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #6b7280;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .document-icon {
@@ -116,12 +133,12 @@
         }
         
         .view-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
-            padding: 12px 24px;
             border: none;
-            border-radius: 6px;
-            font-size: 15px;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
@@ -129,61 +146,135 @@
         }
         
         .view-button:hover {
-            transform: scale(1.02);
+            background: linear-gradient(45deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
         
         .welcome-header {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
+            color: white;
+            margin-bottom: 20px;
         }
         
         .welcome-title {
-            font-size: 32px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 42px;
+            font-weight: 700;
             margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         
         .welcome-subtitle {
-            color: #666;
-            font-size: 16px;
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .confidential-notice {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Archived section styles */
+        .archived-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+        
+        .archived-header {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+        
+        .archived-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+        
+        .archived-subtitle {
+            font-size: 14px;
+            opacity: 0.6;
+            font-style: italic;
+        }
+        
+        .archived-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            opacity: 0.7;
+        }
+        
+        .document-card.archived {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px dashed #ccc;
+            position: relative;
+        }
+        
+        .document-card.archived::before {
+            content: 'ARCHIVED';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #999;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        
+        .document-card.archived:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+            
+            .dashboard-grid, .archived-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .welcome-title {
+                font-size: 32px;
+            }
+            
+            .document-card {
+                padding: 25px;
+            }
         }
         
         .footer {
             text-align: center;
-            padding: 30px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
-            background: rgba(0, 0, 0, 0.1);
-        }
-        
-        .confidential-notice {
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            padding: 15px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #92400e;
-            text-align: center;
-            margin: 20px auto;
-            max-width: 600px;
+            padding: 30px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="letterhead">
-        <div class="company-info">
-            <div class="company-name">CANDLEFISH AI</div>
-            <div>Family Document Portal</div>
-        </div>
+        <img src="candlefish_highquality_original.png" 
+             alt="Candlefish AI Logo" 
+             style="max-width: 150px; margin-bottom: 15px;">
+        <div class="company-name">CANDLEFISH AI</div>
+        <div class="company-info">Illuminating Business Intelligence</div>
     </div>
-
     <div class="main-content">
         <div class="welcome-header">
             <h1 class="welcome-title">Family Dashboard</h1>
@@ -193,7 +284,6 @@
         <div class="confidential-notice">
             ⚠️ CONFIDENTIAL: These documents contain sensitive business and family information
         </div>
-
         <div class="dashboard-grid">
             <!-- New Family Plan Letter - Aug 7 -->
             <div class="document-card new" onclick="window.location.href='family_plan_letter_aug7_2025.html'">
@@ -207,7 +297,6 @@
                 </p>
                 <button class="view-button">View Family Letter</button>
             </div>
-
             <!-- Technical Legal Structure - Aug 7 -->
             <div class="document-card" onclick="window.location.href='candlefish_family_legal_update_08072025.html'">
                 <div class="document-icon">⚖️</div>
@@ -219,31 +308,6 @@
                 </p>
                 <button class="view-button">View Technical Document</button>
             </div>
-
-            <!-- Aug 3 Family Letter -->
-            <div class="document-card" onclick="window.location.href='candlefish_update_08032025_family.html'">
-                <div class="document-icon">💌</div>
-                <h3 class="document-title">Family Communication Letter</h3>
-                <div class="document-date">August 3, 2025</div>
-                <p class="document-description">
-                    Initial family communication outlining the vision for Candlefish AI and preliminary 
-                    structure discussions.
-                </p>
-                <button class="view-button">View Letter</button>
-            </div>
-
-            <!-- Aug 3 Legal Structure -->
-            <div class="document-card" onclick="window.location.href='candlefish_update_08032025_legal.html'">
-                <div class="document-icon">📋</div>
-                <h3 class="document-title">Legal Structure Document</h3>
-                <div class="document-date">August 3, 2025</div>
-                <p class="document-description">
-                    Original legal framework and corporate structure documentation for the Colorado LLC 
-                    formation.
-                </p>
-                <button class="view-button">View Document</button>
-            </div>
-
             <!-- Updated Email to Mike McIntosh -->
             <div class="document-card new" onclick="window.location.href='email_to_mike_mcintosh.md'">
                 <span class="new-badge">UPDATED</span>
@@ -256,7 +320,6 @@
                 </p>
                 <button class="view-button">View Updated Email</button>
             </div>
-
             <!-- Legal Review Document - Aug 7 -->
             <div class="document-card" onclick="window.location.href='candlefish_update_08072025_legal.html'">
                 <div class="document-icon">⚖️</div>
@@ -268,7 +331,6 @@
                 </p>
                 <button class="view-button">View Legal Document</button>
             </div>
-
             <!-- Family Communication - Aug 7 -->
             <div class="document-card" onclick="window.location.href='candlefish_update_08072025_family.html'">
                 <div class="document-icon">👨‍👩‍👧‍👦</div>
@@ -280,14 +342,56 @@
                 </p>
                 <button class="view-button">View Family Version</button>
             </div>
+            <!-- Talking Points -->
+            <div class="document-card" onclick="window.location.href='talking_points.md'">
+                <div class="document-icon">🗣️</div>
+                <h3 class="document-title">Family Discussion Guide</h3>
+                <div class="document-date">August 7, 2025</div>
+                <p class="document-description">
+                    Structured talking points and discussion guide for family meetings about 
+                    the business structure and future plans.
+                </p>
+                <button class="view-button">View Discussion Guide</button>
+            </div>
+        </div>
+        
+        <!-- Archived Documents Section -->
+        <div class="archived-section">
+            <div class="archived-header">
+                <h2 class="archived-title">Archived Documents</h2>
+                <p class="archived-subtitle">These documents contain earlier versions of the structure and are kept for reference only. Please refer to the current documents above for the latest information.</p>
+            </div>
+            <div class="archived-grid">
+                <!-- Aug 3 Family Letter -->
+                <div class="document-card archived" onclick="window.location.href='candlefish_update_08032025_family.html'">
+                    <span class="archived-badge">ARCHIVED</span>
+                    <div class="document-icon">💌</div>
+                    <h3 class="document-title">Family Communication Letter</h3>
+                    <div class="document-date">August 3, 2025</div>
+                    <p class="document-description">
+                        Initial family communication outlining the vision for Candlefish AI and preliminary 
+                        structure discussions. <em>Superseded by Aug 7 documents.</em>
+                    </p>
+                    <button class="view-button">View Archived Letter</button>
+                </div>
+                <!-- Aug 3 Legal Structure -->
+                <div class="document-card archived" onclick="window.location.href='candlefish_update_08032025_legal.html'">
+                    <span class="archived-badge">ARCHIVED</span>
+                    <div class="document-icon">📋</div>
+                    <h3 class="document-title">Legal Structure Document</h3>
+                    <div class="document-date">August 3, 2025</div>
+                    <p class="document-description">
+                        Original legal framework and corporate structure documentation for the Colorado LLC 
+                        formation. <em>Superseded by Aug 7 legal structure.</em>
+                    </p>
+                    <button class="view-button">View Archived Document</button>
+                </div>
+            </div>
         </div>
     </div>
-
     <div class="footer">
-        © 2025 Candlefish AI, LLC. All rights reserved. | Confidential and Proprietary<br>
         Access restricted to authorized family members only
     </div>
-
     <script>
         // Check authentication
         if (sessionStorage.getItem('family-letter-auth') !== 'true') {
