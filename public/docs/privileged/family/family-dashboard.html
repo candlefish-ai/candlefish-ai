@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candlefish AI - Family Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .letterhead {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px 0 30px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .company-info {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .company-name {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .document-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .document-card.new {
+            border: 2px solid #10b981;
+        }
+        
+        .new-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .document-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .document-title {
+            color: #111;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .document-date {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .document-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .view-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .view-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .welcome-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .confidential-notice {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #92400e;
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="letterhead">
+        <div class="company-info">
+            <div class="company-name">CANDLEFISH AI</div>
+            <div>Family Document Portal</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="welcome-header">
+            <h1 class="welcome-title">Family Dashboard</h1>
+            <p class="welcome-subtitle">Important legal and business documents for the Smith family</p>
+        </div>
+        
+        <div class="confidential-notice">
+            ⚠️ CONFIDENTIAL: These documents contain sensitive business and family information
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- New Document - Aug 7 Legal Update -->
+            <div class="document-card new" onclick="window.location.href='candlefish_family_legal_update_08072025.html'">
+                <span class="new-badge">NEW</span>
+                <div class="document-icon">📑</div>
+                <h3 class="document-title">Family Plan Legal Update</h3>
+                <div class="document-date">August 7, 2025</div>
+                <p class="document-description">
+                    Complete legal structure including Shadow Credits system, ownership classes (A/B/V), 
+                    cash-flow waterfall, and revenue distribution scenarios. Action items for family review.
+                </p>
+                <button class="view-button">View Legal Update</button>
+            </div>
+
+            <!-- Aug 3 Family Letter -->
+            <div class="document-card" onclick="window.location.href='candlefish_update_08032025_family.html'">
+                <div class="document-icon">💌</div>
+                <h3 class="document-title">Family Communication Letter</h3>
+                <div class="document-date">August 3, 2025</div>
+                <p class="document-description">
+                    Initial family communication outlining the vision for Candlefish AI and preliminary 
+                    structure discussions.
+                </p>
+                <button class="view-button">View Letter</button>
+            </div>
+
+            <!-- Aug 3 Legal Structure -->
+            <div class="document-card" onclick="window.location.href='candlefish_update_08032025_legal.html'">
+                <div class="document-icon">⚖️</div>
+                <h3 class="document-title">Legal Structure Document</h3>
+                <div class="document-date">August 3, 2025</div>
+                <p class="document-description">
+                    Original legal framework and corporate structure documentation for the Colorado LLC 
+                    formation.
+                </p>
+                <button class="view-button">View Document</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2025 Candlefish AI, LLC. All rights reserved. | Confidential and Proprietary<br>
+        Access restricted to authorized family members only
+    </div>
+
+    <script>
+        // Check authentication
+        if (sessionStorage.getItem('family-letter-auth') !== 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
