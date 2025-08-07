@@ -71,21 +71,27 @@
     <!-- Deferred JavaScript loading -->
     <script defer>
         // Minimal inline script for critical functionality
-        function checkPassword() {
+        async function checkPassword() {
             const password = document.getElementById('password').value;
             const error = document.getElementById('error');
-            
-            if (password === 'candlefish') {
-                sessionStorage.setItem('family-letter-auth', 'true');
-                // Use replace to prevent back button issues
-                window.location.replace('candlefish_update_08032025_family.html');
-            } else {
+            try {
+                const res = await fetch('/.netlify/functions/family-auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: password })
+                });
+                const data = await res.json();
+                if (res.ok && data.ok) {
+                    sessionStorage.setItem('family-letter-auth', 'true');
+                    sessionStorage.setItem('family-letter-token', data.token);
+                    window.location.replace('candlefish_update_08032025_family.html');
+                } else {
+                    throw new Error('Unauthorized');
+                }
+            } catch (e) {
                 error.style.display = 'block';
                 document.getElementById('password').value = '';
-                // Hide error after 3 seconds
-                setTimeout(() => {
-                    error.style.display = 'none';
-                }, 3000);
+                setTimeout(() => { error.style.display = 'none'; }, 3000);
             }
         }
         

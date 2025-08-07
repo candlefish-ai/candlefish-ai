@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in | Candlefish Family</title>
+  <link rel="stylesheet" href="/docs/privileged/family/assets/styles.css" />
+</head>
+<body>
+  <div class="main-content">
+    <div class="auth-container">
+      <h2>Sign in to continue</h2>
+      <p>Use your approved email to access family documents.</p>
+      <div id="error" class="error" style="display:none">Sign in failed</div>
+      <button id="login">Sign in</button>
+    </div>
+  </div>
+  <script>
+    // Requires Netlify Identity widget to be enabled in site settings
+    function startIdentity() {
+      if (!window.netlifyIdentity) {
+        const s = document.createElement('script');
+        s.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+        s.onload = bindIdentity;
+        document.body.appendChild(s);
+      } else {
+        bindIdentity();
+      }
+    }
+    function bindIdentity() {
+      const btn = document.getElementById('login');
+      btn.onclick = () => window.netlifyIdentity && window.netlifyIdentity.open('login');
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('login', (user) => {
+          window.location.href = '/docs/privileged/family/';
+        });
+      }
+    }
+    startIdentity();
+  </script>
+</body>
+</html>
+
+

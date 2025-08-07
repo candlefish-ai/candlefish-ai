@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,noarchive,nosnippet,noimageindex">
     <title>Candlefish AI - Executive Communication</title>
     <style>
         body {
@@ -157,10 +158,9 @@
                 CONFIDENTIAL FAMILY COMMUNICATION
             </div>
             <h2>Executive Document Access</h2>
-            <p>This document contains sensitive business and family information. Please enter the authorization code to proceed.</p>
-            <div class="error" id="error">Invalid authorization code. Please try again.</div>
-            <input type="password" id="password" placeholder="Enter authorization code" autofocus>
-            <button onclick="checkPassword()">Access Document</button>
+            <p>This area is restricted. Please sign in with your approved account to continue.</p>
+            <div class="error" id="error" style="display:none">Not signed in</div>
+            <button id="signin">Sign in</button>
         </div>
     </div>
 
@@ -169,33 +169,27 @@
     </div>
 
     <script>
-        function checkPassword() {
-            const password = document.getElementById('password').value;
-            const error = document.getElementById('error');
-            
-            if (password === 'candlefish') {
-                sessionStorage.setItem('family-letter-auth', 'true');
-                window.location.href = 'candlefish_update_08032025_family.html';
-            } else {
-                error.style.display = 'block';
-                document.getElementById('password').value = '';
-                setTimeout(() => {
-                    error.style.display = 'none';
-                }, 3000);
+        // Netlify Identity gate
+        (function initIdentity(){
+          function ready(){
+            const btn = document.getElementById('signin');
+            if (btn && window.netlifyIdentity){
+              btn.onclick = () => window.netlifyIdentity.open('login');
             }
-        }
-        
-        // Check if already authenticated
-        if (sessionStorage.getItem('family-letter-auth') === 'true') {
-            window.location.href = 'candlefish_update_08032025_family.html';
-        }
-        
-        // Enter key support
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+            if (window.netlifyIdentity && window.netlifyIdentity.currentUser()){
+              window.location.href = 'candlefish_update_08032025_family.html';
             }
-        });
+            if (window.netlifyIdentity){
+              window.netlifyIdentity.on('login', () => window.location.href = 'candlefish_update_08032025_family.html');
+              window.netlifyIdentity.on('logout', () => window.location.reload());
+            }
+          }
+          if (!window.netlifyIdentity){
+            const s=document.createElement('script');
+            s.src='https://identity.netlify.com/v1/netlify-identity-widget.js';
+            s.onload=ready;document.body.appendChild(s);
+          } else { ready(); }
+        })();
     </script>
 </body>
 </html>
