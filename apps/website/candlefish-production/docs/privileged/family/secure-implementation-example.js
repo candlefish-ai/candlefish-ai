@@ -72,47 +72,47 @@ function authenticateToken(req, res, next) {
 app.post('/api/auth/login', loginLimiter, async (req, res) => {
   try {
     const { password } = req.body;
-    
+
     // Validate input
     if (!password || typeof password !== 'string') {
       return res.status(400).json({ error: 'Invalid request' });
     }
-    
+
     // Compare with hashed password from environment
     const validPassword = await bcrypt.compare(
-      password, 
+      password,
       process.env.FAMILY_LETTER_PASSWORD_HASH
     );
-    
+
     if (!validPassword) {
       // Log failed attempt for security monitoring
       console.log(`Failed login attempt from IP: ${req.ip}`);
       return res.status(401).json({ error: 'Invalid authorization code' });
     }
-    
+
     // Generate JWT with expiration
     const token = jwt.sign(
-      { 
+      {
         authorized: true,
         ip: req.ip,
         timestamp: Date.now()
       },
       process.env.JWT_SECRET,
-      { 
+      {
         expiresIn: '2h',
         issuer: 'candlefish-ai',
         audience: 'family-letters'
       }
     );
-    
+
     // Log successful login
     console.log(`Successful login from IP: ${req.ip}`);
-    
-    res.json({ 
+
+    res.json({
       token,
       expiresIn: 7200 // seconds
     });
-    
+
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Authentication service error' });
@@ -128,12 +128,12 @@ app.get('/api/auth/verify', authenticateToken, (req, res) => {
 app.get('/api/documents/family-letter', authenticateToken, apiLimiter, (req, res) => {
   // Additional authorization check could go here
   const documentPath = path.join(__dirname, 'protected-documents', 'family-letter.html');
-  
+
   // Check if file exists
   if (!fs.existsSync(documentPath)) {
     return res.status(404).json({ error: 'Document not found' });
   }
-  
+
   // Set security headers for document
   res.set({
     'Cache-Control': 'no-store, no-cache, must-revalidate, private',
@@ -141,29 +141,29 @@ app.get('/api/documents/family-letter', authenticateToken, apiLimiter, (req, res
     'X-Content-Type-Options': 'nosniff',
     'Content-Type': 'text/html; charset=utf-8'
   });
-  
+
   // Log document access
   console.log(`Document accessed by ${req.user.ip} at ${new Date().toISOString()}`);
-  
+
   res.sendFile(documentPath);
 });
 
 app.get('/api/documents/legal-review', authenticateToken, apiLimiter, (req, res) => {
   const documentPath = path.join(__dirname, 'protected-documents', 'legal-review.html');
-  
+
   if (!fs.existsSync(documentPath)) {
     return res.status(404).json({ error: 'Document not found' });
   }
-  
+
   res.set({
     'Cache-Control': 'no-store, no-cache, must-revalidate, private',
     'Pragma': 'no-cache',
     'X-Content-Type-Options': 'nosniff',
     'Content-Type': 'text/html; charset=utf-8'
   });
-  
+
   console.log(`Legal document accessed by ${req.user.ip} at ${new Date().toISOString()}`);
-  
+
   res.sendFile(documentPath);
 });
 
@@ -199,7 +199,7 @@ if (require.main === module && process.argv[2] === 'hash-password') {
     console.error('Usage: node secure-implementation-example.js hash-password <password>');
     process.exit(1);
   }
-  
+
   bcrypt.hash(password, 12, (err, hash) => {
     if (err) {
       console.error('Error hashing password:', err);

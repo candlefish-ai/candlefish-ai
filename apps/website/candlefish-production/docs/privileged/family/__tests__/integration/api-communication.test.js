@@ -29,7 +29,7 @@ describe('API Communication Integration Tests', () => {
     beforeEach(async () => {
         app = createMockApp();
         jest.clearAllMocks();
-        
+
         // Get fresh tokens for each test
         const loginResponse = await request(app)
             .post('/api/auth/login')
@@ -40,14 +40,14 @@ describe('API Communication Integration Tests', () => {
                 userAgent: 'Test Browser',
                 source: 'integration-test'
             });
-        
+
         testToken = loginResponse.body.token;
-        
+
         // Extract refresh token from cookies
         const cookies = loginResponse.headers['set-cookie'];
         const refreshCookie = cookies.find(cookie => cookie.startsWith('refreshToken='));
         testRefreshToken = refreshCookie.split('=')[1].split(';')[0];
-        
+
         sessionStorage.clear();
         localStorage.clear();
     });
@@ -208,7 +208,7 @@ describe('API Communication Integration Tests', () => {
         test('should handle session timeout simulation', async () => {
             // Simulate expired session by using old timestamp
             const expiredTimestamp = Date.now() - (3 * 60 * 60 * 1000); // 3 hours ago
-            
+
             sessionStorage.setItem('auth_timestamp', expiredTimestamp.toString());
             sessionStorage.setItem('session_start', expiredTimestamp.toString());
 
@@ -297,12 +297,12 @@ describe('API Communication Integration Tests', () => {
                     email: 'family@candlefish-ai.com',
                     password: 'family-secure-2025'
                 }),
-                
+
                 // Document access
                 request(app)
                     .get('/api/documents/FAM-2025-001')
                     .set('Authorization', `Bearer ${testToken}`),
-                
+
                 // Metadata access
                 request(app)
                     .get('/api/documents/FAM-2025-001/metadata')
@@ -351,7 +351,7 @@ describe('API Communication Integration Tests', () => {
     describe('Performance Integration', () => {
         test('should handle multiple simultaneous authentications', async () => {
             const startTime = Date.now();
-            
+
             // Create multiple concurrent login requests
             const loginPromises = Array(5).fill().map((_, index) =>
                 request(app)
@@ -460,7 +460,7 @@ describe('API Communication Integration Tests', () => {
             };
 
             sessionStorage.setItem('test_data', JSON.stringify(testData));
-            
+
             const retrievedData = JSON.parse(sessionStorage.getItem('test_data'));
             expect(retrievedData).toEqual(testData);
 
@@ -477,7 +477,7 @@ describe('API Communication Integration Tests', () => {
             };
 
             localStorage.setItem('rate_limit_data', JSON.stringify(attemptData));
-            
+
             const retrievedData = JSON.parse(localStorage.getItem('rate_limit_data'));
             expect(retrievedData.attempts).toHaveLength(3);
             expect(retrievedData.lastAttempt).toBe(attemptData.lastAttempt);
@@ -490,7 +490,7 @@ describe('API Communication Integration Tests', () => {
         test('should handle storage quota limits', () => {
             // Test storage with large data
             const largeData = 'x'.repeat(1000000); // 1MB string
-            
+
             try {
                 sessionStorage.setItem('large_data', largeData);
                 expect(sessionStorage.getItem('large_data')).toBe(largeData);

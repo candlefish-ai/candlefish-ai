@@ -21,7 +21,7 @@
   function sendMetrics(metrics) {
     // In production, send to your analytics endpoint
     console.log('Performance Metrics:', metrics);
-    
+
     // Example: Send to analytics
     // fetch('/api/metrics', {
     //   method: 'POST',

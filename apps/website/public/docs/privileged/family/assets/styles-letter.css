@@ -106,16 +106,16 @@ body {
     .letter-container {
         padding: 20px 15px;
     }
-    
+
     .letter-content p {
         text-align: left;
         hyphens: none;
     }
-    
+
     .company-name {
         font-size: 20px;
     }
-    
+
     .print-button {
         bottom: 10px;
         right: 10px;
@@ -130,28 +130,28 @@ body {
         font-size: 12pt;
         line-height: 1.5;
     }
-    
+
     .letter-container {
         max-width: 100%;
         padding: 0;
     }
-    
+
     .letterhead {
         page-break-after: avoid;
         border-bottom: 1px solid #000;
     }
-    
+
     .letter-content p {
         text-align: justify;
         page-break-inside: avoid;
         orphans: 3;
         widows: 3;
     }
-    
+
     .print-button {
         display: none;
     }
-    
+
     .footer {
         position: fixed;
         bottom: 0;
@@ -159,7 +159,7 @@ body {
         right: 0;
         border-top: 1px solid #000;
     }
-    
+
     /* Force color printing for branding */
     .company-name {
         color: #00CED1 !important;

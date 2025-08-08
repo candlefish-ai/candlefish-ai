@@ -132,7 +132,7 @@ test.describe('Complete User Authentication Flow', () => {
             viewport: { width: 1280, height: 720 },
             ignoreHTTPSErrors: true
         });
-        
+
         page = await context.newPage();
         loginPage = new LoginPage(page);
         documentPage = new DocumentViewerPage(page);
@@ -141,7 +141,7 @@ test.describe('Complete User Authentication Flow', () => {
         await page.route('**/api/auth/login', async route => {
             const request = route.request();
             const postData = JSON.parse(request.postData() || '{}');
-            
+
             if (postData.email === FAMILY_EMAIL && postData.password === FAMILY_PASSWORD) {
                 await route.fulfill({
                     status: 200,
@@ -174,7 +174,7 @@ test.describe('Complete User Authentication Flow', () => {
 
         await page.route('**/api/documents/FAM-2025-001', async route => {
             const authHeader = route.request().headers()['authorization'];
-            
+
             if (authHeader && authHeader.includes('mock-jwt-token')) {
                 await route.fulfill({
                     status: 200,
@@ -222,7 +222,7 @@ test.describe('Complete User Authentication Flow', () => {
     test('should complete successful login and document viewing flow', async () => {
         // Step 1: Navigate to login page
         await loginPage.goto();
-        
+
         // Verify page loaded correctly
         await expect(page.locator('h2')).toContainText('Executive Document Access');
         await expect(page.locator('.confidential-notice')).toContainText('CONFIDENTIAL FAMILY COMMUNICATION');
@@ -306,7 +306,7 @@ test.describe('Complete User Authentication Flow', () => {
         await loginPage.goto();
 
         await loginPage.fillPassword('test-password');
-        
+
         // Initially password should be hidden
         await expect(page.locator('#password')).toHaveAttribute('type', 'password');
         await expect(page.locator('#togglePassword')).toHaveAttribute('aria-label', 'Show password');
@@ -596,10 +596,10 @@ test.describe('Accessibility E2E Tests', () => {
         // This would require actual color contrast checking
         // For now, we verify that error states are clearly distinguishable
         await page.click('#submitButton');
-        
+
         const errorField = page.locator('#email.error');
         await expect(errorField).toBeVisible();
-        
+
         // In a real test, you would check computed styles for contrast ratios
         const styles = await errorField.evaluate(el => {
             const computed = window.getComputedStyle(el);
@@ -622,42 +622,42 @@ test.describe('Cross-Browser and Mobile Testing', () => {
             viewport: { width: 375, height: 667 }, // iPhone SE dimensions
             userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15'
         });
-        
+
         const page = await context.newPage();
-        
+
         await page.goto(`${BASE_URL}/secure-login.html`);
-        
+
         // Verify mobile-friendly design
         await expect(page.locator('.login-form')).toBeVisible();
         await expect(page.locator('#email')).toBeVisible();
         await expect(page.locator('#password')).toBeVisible();
-        
+
         // Test touch interactions
         await page.tap('#email');
         await expect(page.locator('#email')).toBeFocused();
-        
+
         await page.fill('#email', FAMILY_EMAIL);
         await page.fill('#password', FAMILY_PASSWORD);
         await page.tap('#submitButton');
-        
+
         await context.close();
     });
 
     test('should handle slow network conditions', async ({ browser }) => {
         const context = await browser.newContext();
         const page = await context.newPage();
-        
+
         // Simulate slow 3G
         await page.route('**/*', async route => {
             await new Promise(resolve => setTimeout(resolve, 1000)); // 1s delay
             await route.continue();
         });
-        
+
         await page.goto(`${BASE_URL}/secure-login.html`);
-        
+
         // Verify page still loads correctly despite slow network
         await expect(page.locator('h2')).toContainText('Executive Document Access');
-        
+
         await context.close();
     });
 });

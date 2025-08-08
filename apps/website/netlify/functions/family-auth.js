@@ -152,5 +152,3 @@ function getIdentityUser(event, context){
   if (/nf_jwt=/.test(cookie)) return { token: 'nf_jwt' };
   return null;
 }
-
-

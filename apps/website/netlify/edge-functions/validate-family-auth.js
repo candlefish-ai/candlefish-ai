@@ -103,5 +103,3 @@ function base64UrlDecode(b64u) {
   for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
   return out;
 }
-
-

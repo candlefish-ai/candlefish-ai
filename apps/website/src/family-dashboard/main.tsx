@@ -9,5 +9,3 @@ createRoot(container).render(
     <DashboardApp />
   </React.StrictMode>
 )
-
-

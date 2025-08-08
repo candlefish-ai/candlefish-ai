@@ -79,12 +79,12 @@ self.addEventListener('fetch', event => {
             if (response) {
               return response;
             }
-            
+
             // Return offline page for navigation requests
             if (event.request.mode === 'navigate') {
               return caches.match('/index.html');
             }
-            
+
             // Return placeholder for missing resources
             if (event.request.destination === 'image') {
               return new Response(

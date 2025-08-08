@@ -1,8 +1,8 @@
 # Email to Mike McIntosh - Legal Review Request
 
-**To:** Mike McIntosh  
-**From:** Patrick Smith  
-**Date:** August 7, 2025  
+**To:** Mike McIntosh
+**From:** Patrick Smith
+**Date:** August 7, 2025
 **Subject:** Candlefish AI Structural Update - Comprehensive Legal Review
 
 Mike,
@@ -16,27 +16,33 @@ Since our last communication on August 3rd, we've refined our approach to creati
 ## Key Structural Innovations
 
 ### 1. Shadow Credits System
+
 We've implemented a sophisticated Shadow Credits mechanism that:
+
 - Tracks individual family member contributions during Morgan Stanley employment
 - Converts accumulated credits to equity upon lifting of employment restrictions
 - Provides a transparent, merit-based path to ownership
 
 ### 2. Three-Class Ownership Structure
+
 Our new structure introduces a multi-tiered equity approach:
 
 #### Class B (Legacy Units)
+
 - Undilutable, non-voting units
 - Permanent profit rights
 - Distributed: 1/3 each to Kendall, Tyler, Trevor
 - Ensures foundational financial security for the next generation
 
 #### Class A (Contribution Units)
+
 - Rewards sweat equity
 - Issued quarterly based on comprehensive credit ledger
 - 3-year vesting schedule
 - Dynamically reflects ongoing family contributions
 
 #### Class V (Voting Units)
+
 - Voting rights allocation:
   - Pat: 40%
   - Karen: 40%
@@ -44,7 +50,9 @@ Our new structure introduces a multi-tiered equity approach:
 - Ensures balanced governance with meritocratic elements
 
 ### 3. Cash-Flow Waterfall Mechanism
+
 Our proposed distribution prioritizes:
+
 1. Market-median salaries (e.g., Tyler projected at ~$140k upon revenue generation)
 2. 20% of quarterly net cash to repay founders' capital (4% interest)
 3. 10% of subsidiary sale proceeds to Kids' Opportunity Fund
@@ -52,6 +60,7 @@ Our proposed distribution prioritizes:
 5. 30% retained for business reinvestment
 
 ### 4. Governance Innovations
+
 - **Credit-Score Review Panel**:
   - Tyler (Tech Lead)
   - Poppy (Legal Perspective)
@@ -59,11 +68,13 @@ Our proposed distribution prioritizes:
 - Ensures transparent, multi-perspective decision-making
 
 ### 5. Consultant and External Advisor Structure
+
 - Uncle Scott McIntosh (Operations): Cash-only compensation
 - Poppy (Legal Advisory): Cash-only compensation
 - Both capped at 10% of annual net profit
 
 ### 6. Estate Planning Provision
+
 - 10% allocation to Denver Foundation endowment if both parents die prior to cash generation
 - Ensures societal impact even in extreme contingencies
 
@@ -82,16 +93,19 @@ Both documents available at: [https://candlefish.ai/docs/privileged/family/](htt
 ## Specific Legal Review Requests
 
 ### Regulatory Compliance
+
 - Validate our interpretation of SEC Rule 204A-1 and FINRA Rule 3210
 - Assess potential conflicts of interest with Morgan Stanley employment
 - Review Shadow Credits system for potential regulatory challenges
 
 ### Corporate Structure Validation
+
 - Evaluate liability protections in the multi-class structure
 - Analyze tax implications of the cash-flow waterfall
 - Review ownership transition mechanisms
 
 ### Governance and Risk Mitigation
+
 - Assess decision-making rights and minority shareholder protections
 - Review buy-sell provisions
 - Evaluate key person insurance recommendations

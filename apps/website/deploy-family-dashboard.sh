@@ -130,7 +130,7 @@ if command -v npm &> /dev/null; then
         echo "Building project..."
         npm run build
         check_status $? "Build completed"
-        
+
         # Re-check dist/_redirects after build
         if [ -f "$DIST_REDIRECT" ]; then
             if grep -q "/docs/privileged/family/\*.*200$" "$DIST_REDIRECT"; then
@@ -154,11 +154,11 @@ echo "------------------------"
 
 if command -v netlify &> /dev/null; then
     echo "Netlify CLI is available"
-    
+
     # Check deployment status
     echo "Checking current deployment status..."
     netlify status
-    
+
     echo ""
     echo "Would you like to deploy to Netlify? (y/n)"
     read -r DEPLOY_CHOICE
@@ -166,7 +166,7 @@ if command -v netlify &> /dev/null; then
         echo "Deploying to Netlify..."
         netlify deploy --prod
         check_status $? "Deployment triggered"
-        
+
         echo ""
         echo "Deployment URLs:"
         echo "  Main: https://candlefish.ai/docs/privileged/family/"

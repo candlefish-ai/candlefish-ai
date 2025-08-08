@@ -1,6 +1,7 @@
 # Candlefish AI Family Letter - Secure Implementation Guide
 
 ## Overview
+
 This guide provides step-by-step instructions for implementing a secure version of the family letter system that addresses all identified vulnerabilities.
 
 ## Architecture Overview
@@ -12,12 +13,12 @@ This guide provides step-by-step instructions for implementing a secure version 
 │  (Frontend)     │◀────│  (Backend API)   │◀────│ (Outside Public)│
 │                 │     │                  │     │                 │
 └─────────────────┘     └──────────────────┘     └─────────────────┘
-        │                        │                         
-        │                        │                         
-        ▼                        ▼                         
-   Local Storage            JWT Tokens                     
-   (Auth Token)          Rate Limiting                     
-                         HTTPS/TLS                         
+        │                        │
+        │                        │
+        ▼                        ▼
+   Local Storage            JWT Tokens
+   (Auth Token)          Rate Limiting
+                         HTTPS/TLS
 ```
 
 ## Implementation Steps
@@ -45,6 +46,7 @@ touch .env
 ### Step 2: Environment Configuration
 
 Create `.env` file:
+
 ```env
 # Server Configuration
 PORT=3000
@@ -75,6 +77,7 @@ node -e "const bcrypt = require('bcrypt'); bcrypt.hash('your-secure-password', 1
 ### Step 4: Secure Server Implementation
 
 Create `server/app.js`:
+
 ```javascript
 // See secure-implementation-example.js for full implementation
 ```
@@ -87,6 +90,7 @@ mv public/docs/privileged/family/*.html protected-documents/
 ```
 
 Update protected documents to remove client-side auth checks:
+
 ```html
 <!-- Remove all sessionStorage checks from protected documents -->
 <!-- Documents are now served only through authenticated API -->
@@ -97,6 +101,7 @@ Update protected documents to remove client-side auth checks:
 #### Option A: Netlify Functions (Serverless)
 
 Create `netlify/functions/auth.js`:
+
 ```javascript
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -106,27 +111,27 @@ exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
-  
+
   // Parse body
   const { password } = JSON.parse(event.body);
-  
+
   // Verify password
   const valid = await bcrypt.compare(password, process.env.PASSWORD_HASH);
-  
+
   if (!valid) {
-    return { 
-      statusCode: 401, 
+    return {
+      statusCode: 401,
       body: JSON.stringify({ error: 'Invalid credentials' })
     };
   }
-  
+
   // Generate token
   const token = jwt.sign(
     { authorized: true },
     process.env.JWT_SECRET,
     { expiresIn: '2h' }
   );
-  
+
   return {
     statusCode: 200,
     body: JSON.stringify({ token })
@@ -137,6 +142,7 @@ exports.handler = async (event, context) => {
 #### Option B: Traditional Server (Recommended)
 
 Deploy the Express server on:
+
 - AWS EC2 with Application Load Balancer
 - Google Cloud Run
 - Heroku
@@ -145,6 +151,7 @@ Deploy the Express server on:
 ### Step 7: Security Headers Configuration
 
 Update `netlify.toml` for comprehensive security:
+
 ```toml
 [[headers]]
   for = "/*"
@@ -169,7 +176,7 @@ Update `netlify.toml` for comprehensive security:
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     X-Robots-Tag = "noindex, noarchive, nosnippet, noimageindex"
-    
+
     # Caching
     Cache-Control = "no-cache, no-store, must-revalidate"
     Pragma = "no-cache"
@@ -208,6 +215,7 @@ Update `netlify.toml` for comprehensive security:
 ### Step 8: Monitoring and Logging
 
 Implement comprehensive logging:
+
 ```javascript
 // logger.js
 const winston = require('winston');
@@ -231,6 +239,7 @@ logger.error('Security breach attempt', { ip: req.ip, details: error });
 ### Step 9: Security Testing
 
 Create automated security tests:
+
 ```javascript
 // security.test.js
 describe('Security Tests', () => {
@@ -238,7 +247,7 @@ describe('Security Tests', () => {
     const res = await request(app).get('/protected-documents/family-letter.html');
     expect(res.status).toBe(404);
   });
-  
+
   test('Enforces rate limiting', async () => {
     for (let i = 0; i < 6; i++) {
       await request(app).post('/api/auth/login').send({ password: 'wrong' });
@@ -246,7 +255,7 @@ describe('Security Tests', () => {
     const res = await request(app).post('/api/auth/login').send({ password: 'correct' });
     expect(res.status).toBe(429);
   });
-  
+
   test('Validates JWT tokens', async () => {
     const res = await request(app)
       .get('/api/documents/family-letter')
@@ -271,6 +280,7 @@ describe('Security Tests', () => {
 ## Security Best Practices
 
 1. **Regular Updates**: Keep all dependencies updated
+
    ```bash
    npm audit
    npm update
@@ -301,6 +311,7 @@ If a security breach is suspected:
 ## Compliance Notes
 
 Given the references to SEC and FINRA regulations in the documents:
+
 - Maintain audit logs for 3 years minimum
 - Implement data retention policies
 - Consider SOC 2 compliance requirements
@@ -309,6 +320,7 @@ Given the references to SEC and FINRA regulations in the documents:
 ## Conclusion
 
 This implementation provides defense in depth with:
+
 - Server-side authentication
 - Encrypted token-based sessions
 - Rate limiting and brute force protection

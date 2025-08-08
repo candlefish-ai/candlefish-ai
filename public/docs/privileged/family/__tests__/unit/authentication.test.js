@@ -6,7 +6,7 @@
 describe('Family Letter Authentication', () => {
   let mockWindow;
   let mockDocument;
-  
+
   beforeEach(() => {
     // Setup DOM elements
     document.body.innerHTML = `
@@ -16,19 +16,19 @@ describe('Family Letter Authentication', () => {
         <button onclick="checkPassword()">Access Document</button>
       </div>
     `;
-    
+
     // Mock window.location
     mockWindow = {
       location: {
         href: 'http://localhost/index.html'
       }
     };
-    
+
     // Define checkPassword function for testing
     global.checkPassword = () => {
       const password = document.getElementById('password').value;
       const error = document.getElementById('error');
-      
+
       if (password === 'candlefish') {
         sessionStorage.setItem('family-letter-auth', 'true');
         mockWindow.location.href = 'candlefish_update_08032025_family.html';
@@ -48,9 +48,9 @@ describe('Family Letter Authentication', () => {
     test('should accept correct password', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'candlefish';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(true);
       expect(sessionStorage.getItem('family-letter-auth')).toBe('true');
       expect(mockWindow.location.href).toBe('candlefish_update_08032025_family.html');
@@ -60,9 +60,9 @@ describe('Family Letter Authentication', () => {
       const passwordInput = document.getElementById('password');
       const errorElement = document.getElementById('error');
       passwordInput.value = 'wrongpassword';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
       expect(errorElement.style.display).toBe('block');
@@ -73,9 +73,9 @@ describe('Family Letter Authentication', () => {
       const passwordInput = document.getElementById('password');
       const errorElement = document.getElementById('error');
       passwordInput.value = '';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
       expect(errorElement.style.display).toBe('block');
@@ -84,9 +84,9 @@ describe('Family Letter Authentication', () => {
     test('should be case sensitive', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'CANDLEFISH';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });
@@ -94,9 +94,9 @@ describe('Family Letter Authentication', () => {
     test('should reject password with extra spaces', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = ' candlefish ';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });
@@ -106,27 +106,27 @@ describe('Family Letter Authentication', () => {
     test('should set session storage on successful authentication', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'candlefish';
-      
+
       checkPassword();
-      
+
       expect(sessionStorage.getItem('family-letter-auth')).toBe('true');
     });
 
     test('should not set session storage on failed authentication', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'wrong';
-      
+
       checkPassword();
-      
+
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });
 
     test('should handle existing session', () => {
       sessionStorage.setItem('family-letter-auth', 'true');
-      
+
       // Simulate page load check
       const isAuthenticated = sessionStorage.getItem('family-letter-auth') === 'true';
-      
+
       expect(isAuthenticated).toBe(true);
     });
   });
@@ -136,9 +136,9 @@ describe('Family Letter Authentication', () => {
       const passwordInput = document.getElementById('password');
       const errorElement = document.getElementById('error');
       passwordInput.value = 'wrong';
-      
+
       checkPassword();
-      
+
       expect(errorElement.style.display).toBe('block');
       expect(errorElement.textContent).toBe('Invalid authorization code. Please try again.');
     });
@@ -146,9 +146,9 @@ describe('Family Letter Authentication', () => {
     test('should clear password field on failed authentication', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'wrong';
-      
+
       checkPassword();
-      
+
       expect(passwordInput.value).toBe('');
     });
 
@@ -156,11 +156,11 @@ describe('Family Letter Authentication', () => {
       const passwordInput = document.getElementById('password');
       const errorElement = document.getElementById('error');
       passwordInput.value = 'wrong';
-      
+
       checkPassword();
-      
+
       expect(errorElement.style.display).toBe('block');
-      
+
       setTimeout(() => {
         expect(errorElement.style.display).toBe('none');
         done();
@@ -172,9 +172,9 @@ describe('Family Letter Authentication', () => {
     test('should handle special characters', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = '<script>alert("xss")</script>';
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });
@@ -182,9 +182,9 @@ describe('Family Letter Authentication', () => {
     test('should handle SQL injection attempts', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = "'; DROP TABLE users; --";
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });
@@ -192,9 +192,9 @@ describe('Family Letter Authentication', () => {
     test('should handle extremely long input', () => {
       const passwordInput = document.getElementById('password');
       passwordInput.value = 'a'.repeat(10000);
-      
+
       const result = checkPassword();
-      
+
       expect(result).toBe(false);
       expect(sessionStorage.getItem('family-letter-auth')).toBeNull();
     });

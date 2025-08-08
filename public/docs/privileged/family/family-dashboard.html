@@ -14,20 +14,20 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .letterhead {
             background: rgba(255, 255, 255, 0.98);
             padding: 40px 0 30px;
             text-align: center;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
-        
+
         .company-info {
             color: #666;
             font-size: 14px;
             line-height: 1.6;
         }
-        
+
         .company-name {
             color: #667eea;
             font-size: 28px;
@@ -35,7 +35,7 @@
             letter-spacing: 2px;
             margin-bottom: 10px;
         }
-        
+
         .main-content {
             flex: 1;
             padding: 40px 20px;
@@ -43,14 +43,14 @@
             margin: 0 auto;
             width: 100%;
         }
-        
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
             margin-top: 30px;
         }
-        
+
         .document-card {
             background: white;
             padding: 30px;
@@ -61,16 +61,16 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .document-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         }
-        
+
         .document-card.new {
             border: 2px solid #10b981;
         }
-        
+
         .new-badge {
             position: absolute;
             top: -10px;
@@ -85,13 +85,13 @@
             box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% { transform: scale(1) rotate(12deg); }
             50% { transform: scale(1.05) rotate(12deg); }
             100% { transform: scale(1) rotate(12deg); }
         }
-        
+
         .archived-badge {
             position: absolute;
             top: 15px;
@@ -106,32 +106,32 @@
             letter-spacing: 0.5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .document-icon {
             font-size: 48px;
             margin-bottom: 20px;
         }
-        
+
         .document-title {
             color: #111;
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 10px;
         }
-        
+
         .document-date {
             color: #999;
             font-size: 14px;
             margin-bottom: 15px;
         }
-        
+
         .document-description {
             color: #666;
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 20px;
         }
-        
+
         .view-button {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
@@ -144,32 +144,32 @@
             transition: all 0.3s;
             width: 100%;
         }
-        
+
         .view-button:hover {
             background: linear-gradient(45deg, #5a6fd8, #6a4190);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .welcome-header {
             text-align: center;
             color: white;
             margin-bottom: 20px;
         }
-        
+
         .welcome-title {
             font-size: 42px;
             font-weight: 700;
             margin-bottom: 10px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        
+
         .welcome-subtitle {
             font-size: 18px;
             opacity: 0.9;
             font-weight: 300;
         }
-        
+
         .confidential-notice {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -181,46 +181,46 @@
             margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
+
         /* Archived section styles */
         .archived-section {
             margin-top: 60px;
             padding-top: 40px;
             border-top: 2px dashed rgba(255, 255, 255, 0.3);
         }
-        
+
         .archived-header {
             text-align: center;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 20px;
         }
-        
+
         .archived-title {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 10px;
             opacity: 0.8;
         }
-        
+
         .archived-subtitle {
             font-size: 14px;
             opacity: 0.6;
             font-style: italic;
         }
-        
+
         .archived-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
             opacity: 0.7;
         }
-        
+
         .document-card.archived {
             background: rgba(255, 255, 255, 0.9);
             border: 2px dashed #ccc;
             position: relative;
         }
-        
+
         .document-card.archived::before {
             content: 'ARCHIVED';
             position: absolute;
@@ -234,31 +234,31 @@
             font-weight: 600;
             opacity: 0.8;
         }
-        
+
         .document-card.archived:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-        
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 20px 15px;
             }
-            
+
             .dashboard-grid, .archived-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
+
             .welcome-title {
                 font-size: 32px;
             }
-            
+
             .document-card {
                 padding: 25px;
             }
         }
-        
+
         .footer {
             text-align: center;
             padding: 30px 20px;
@@ -269,8 +269,8 @@
 </head>
 <body>
     <div class="letterhead">
-        <img src="candlefish_highquality_original.png" 
-             alt="Candlefish AI Logo" 
+        <img src="candlefish_original.png"
+             alt="Candlefish AI Logo"
              style="max-width: 150px; margin-bottom: 15px;">
         <div class="company-name">CANDLEFISH AI</div>
         <div class="company-info">Illuminating Business Intelligence</div>
@@ -280,7 +280,7 @@
             <h1 class="welcome-title">Family Dashboard</h1>
             <p class="welcome-subtitle">Important legal and business documents for the Smith family</p>
         </div>
-        
+
         <div class="confidential-notice">
             ⚠️ CONFIDENTIAL: These documents contain sensitive business and family information
         </div>
@@ -292,7 +292,7 @@
                 <h3 class="document-title">Family Plan Letter</h3>
                 <div class="document-date">August 7, 2025</div>
                 <p class="document-description">
-                    Comprehensive family plan with Shadow Credits system, ownership classes (A/B/V), 
+                    Comprehensive family plan with Shadow Credits system, ownership classes (A/B/V),
                     cash-flow waterfall, and illustrative revenue scenarios. Ready for family review.
                 </p>
                 <button class="view-button">View Family Letter</button>
@@ -303,7 +303,7 @@
                 <h3 class="document-title">Technical Legal Structure</h3>
                 <div class="document-date">August 7, 2025</div>
                 <p class="document-description">
-                    Detailed technical documentation of the legal framework, entity structure, 
+                    Detailed technical documentation of the legal framework, entity structure,
                     and implementation mechanics for legal review.
                 </p>
                 <button class="view-button">View Technical Document</button>
@@ -326,7 +326,7 @@
                 <h3 class="document-title">Legal Review Document</h3>
                 <div class="document-date">August 7, 2025</div>
                 <p class="document-description">
-                    Full legal documentation for Mike McIntosh's review including regulatory 
+                    Full legal documentation for Mike McIntosh's review including regulatory
                     compliance analysis and structural details.
                 </p>
                 <button class="view-button">View Legal Document</button>
@@ -348,13 +348,13 @@
                 <h3 class="document-title">Family Discussion Guide</h3>
                 <div class="document-date">August 7, 2025</div>
                 <p class="document-description">
-                    Structured talking points and discussion guide for family meetings about 
+                    Structured talking points and discussion guide for family meetings about
                     the business structure and future plans.
                 </p>
                 <button class="view-button">View Discussion Guide</button>
             </div>
         </div>
-        
+
         <!-- Archived Documents Section -->
         <div class="archived-section">
             <div class="archived-header">
@@ -369,7 +369,7 @@
                     <h3 class="document-title">Family Communication Letter</h3>
                     <div class="document-date">August 3, 2025</div>
                     <p class="document-description">
-                        Initial family communication outlining the vision for Candlefish AI and preliminary 
+                        Initial family communication outlining the vision for Candlefish AI and preliminary
                         structure discussions. <em>Superseded by Aug 7 documents.</em>
                     </p>
                     <button class="view-button">View Archived Letter</button>
@@ -381,7 +381,7 @@
                     <h3 class="document-title">Legal Structure Document</h3>
                     <div class="document-date">August 3, 2025</div>
                     <p class="document-description">
-                        Original legal framework and corporate structure documentation for the Colorado LLC 
+                        Original legal framework and corporate structure documentation for the Colorado LLC
                         formation. <em>Superseded by Aug 7 legal structure.</em>
                     </p>
                     <button class="view-button">View Archived Document</button>

@@ -7,6 +7,7 @@ Comprehensive test coverage for the Candlefish AI family letter authentication a
 **Current Implementation Security Rating: ⚠️ UNSAFE FOR PRODUCTION**
 
 ### Critical Security Issues
+
 1. **Password hardcoded in client-side JavaScript** - Easily accessible to anyone viewing source
 2. **No server-side authentication** - All validation happens client-side
 3. **No rate limiting** - Vulnerable to brute force attacks
@@ -60,22 +61,26 @@ __tests__/
 ## Running Tests
 
 ### Prerequisites
+
 ```bash
 cd /path/to/candlefish-ai/public/docs/privileged/family/__tests__
 npm install
 ```
 
 ### Quick Test Run
+
 ```bash
 ./run-tests.sh --quick
 ```
 
 ### Full Test Suite
+
 ```bash
 ./run-tests.sh
 ```
 
 ### Specific Test Categories
+
 ```bash
 ./run-tests.sh --unit-only        # Unit tests only
 ./run-tests.sh --security-only    # Security tests only
@@ -83,6 +88,7 @@ npm install
 ```
 
 ### Individual Test Categories
+
 ```bash
 npm test                          # Unit tests with coverage
 npm run test:e2e                 # Playwright E2E tests
@@ -93,18 +99,21 @@ npm run test:accessibility       # A11y compliance tests
 ## Test Results Interpretation
 
 ### Unit Tests
+
 - ✅ **Authentication Logic**: Thoroughly tested password validation
 - ✅ **DOM Manipulation**: Complete UI interaction coverage
 - ✅ **Error Handling**: Comprehensive error state testing
 - ✅ **Input Validation**: Edge cases and malicious input tested
 
 ### E2E Tests
+
 - ✅ **Authentication Flow**: Complete user journey testing
 - ✅ **Content Display**: Family letter rendering verification
 - ✅ **Cross-browser**: Chrome, Firefox, Safari, Mobile devices
 - ✅ **Responsive Design**: Mobile and desktop layouts
 
 ### Security Tests
+
 - ❌ **Authentication Security**: Multiple critical vulnerabilities
 - ❌ **Input Validation**: XSS and injection vulnerabilities
 - ❌ **Session Management**: Bypassable authentication
@@ -112,6 +121,7 @@ npm run test:accessibility       # A11y compliance tests
 - ⚠️ **Headers**: Missing security headers documented
 
 ### Accessibility Tests
+
 - ✅ **WCAG 2.1 AA**: Meets most accessibility standards
 - ✅ **Screen Readers**: Proper ARIA labels and roles
 - ✅ **Keyboard Navigation**: Full keyboard accessibility
@@ -119,6 +129,7 @@ npm run test:accessibility       # A11y compliance tests
 - ⚠️ **Focus Management**: Minor improvements needed
 
 ### Performance Tests
+
 - ✅ **Core Web Vitals**: FCP < 1.8s, LCP < 2.5s, CLS < 0.1
 - ✅ **Load Times**: Pages load under 2 seconds
 - ✅ **Memory Usage**: No significant memory leaks
@@ -129,6 +140,7 @@ npm run test:accessibility       # A11y compliance tests
 ### Immediate Actions Required (Before Any Production Use)
 
 1. **Implement Server-Side Authentication**
+
    ```bash
    # Remove client-side password check
    # Implement secure backend authentication
@@ -136,6 +148,7 @@ npm run test:accessibility       # A11y compliance tests
    ```
 
 2. **Add Rate Limiting**
+
    ```bash
    # Implement request throttling
    # Add CAPTCHA after failed attempts
@@ -143,6 +156,7 @@ npm run test:accessibility       # A11y compliance tests
    ```
 
 3. **Secure Content Access**
+
    ```bash
    # Protect family letter with server-side auth check
    # Implement proper session validation
@@ -150,6 +164,7 @@ npm run test:accessibility       # A11y compliance tests
    ```
 
 4. **Add Security Headers**
+
    ```bash
    # Content-Security-Policy
    # X-Frame-Options: DENY
@@ -160,16 +175,19 @@ npm run test:accessibility       # A11y compliance tests
 ### Development Workflow
 
 1. **Before Code Changes**
+
    ```bash
    ./run-tests.sh --unit-only
    ```
 
 2. **Before Deployment**
+
    ```bash
    ./run-tests.sh
    ```
 
 3. **Security Review**
+
    ```bash
    ./run-tests.sh --security-only
    ```
@@ -186,12 +204,14 @@ The test suite integrates with GitHub Actions for automated testing:
 ## Test Data and Fixtures
 
 ### Mock Data
+
 - Invalid passwords for security testing
 - XSS and injection attack vectors
 - Large input strings for stress testing
 - Unicode and special character inputs
 
 ### Test Scenarios
+
 - Normal authentication flow
 - Failed authentication attempts
 - Session management edge cases
@@ -201,6 +221,7 @@ The test suite integrates with GitHub Actions for automated testing:
 ## Accessibility Testing Details
 
 ### WCAG 2.1 AA Compliance
+
 - ✅ Proper heading hierarchy
 - ✅ Form labels and descriptions
 - ✅ Keyboard navigation support
@@ -210,6 +231,7 @@ The test suite integrates with GitHub Actions for automated testing:
 - ✅ Error announcement
 
 ### Assistive Technology Testing
+
 - Screen readers (NVDA, JAWS, VoiceOver simulation)
 - Keyboard-only navigation
 - High contrast mode
@@ -219,12 +241,14 @@ The test suite integrates with GitHub Actions for automated testing:
 ## Performance Benchmarks
 
 ### Core Web Vitals Targets
+
 - **First Contentful Paint (FCP)**: < 1.8 seconds ✅
 - **Largest Contentful Paint (LCP)**: < 2.5 seconds ✅
 - **Cumulative Layout Shift (CLS)**: < 0.1 ✅
 - **Time to Interactive (TTI)**: < 3.8 seconds ✅
 
 ### Load Testing Results
+
 - **Concurrent Users**: Tested up to 100 simultaneous attempts
 - **Memory Usage**: Stable under normal usage patterns
 - **Error Recovery**: Graceful handling of network failures
@@ -233,18 +257,21 @@ The test suite integrates with GitHub Actions for automated testing:
 ## Contributing to Tests
 
 ### Adding New Tests
+
 1. Follow the existing test structure
 2. Include both positive and negative test cases
 3. Add security considerations for any new functionality
 4. Update this README with new test categories
 
 ### Test Naming Conventions
+
 - Unit tests: `functionality.test.js`
 - E2E tests: `user-scenario.spec.ts`
 - Security tests: `vulnerability-type.spec.ts`
 - Performance tests: `performance-aspect.js`
 
 ### Code Coverage Requirements
+
 - Minimum 80% line coverage for unit tests
 - All critical user paths covered in E2E tests
 - Security edge cases documented and tested

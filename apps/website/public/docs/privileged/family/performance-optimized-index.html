@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Candlefish AI - Executive Communication</title>
-    
+
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    
+
     <!-- Critical CSS inline - only above-fold styles -->
     <style>
         /* Critical CSS - 1.2KB minified */
         *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;min-height:100vh;display:flex;flex-direction:column}.letterhead{background:linear-gradient(to bottom,#f8f8f8 0%,#fff 100%);padding:40px 0 30px;text-align:center;border-bottom:2px solid #00CED1}.logo-container{max-width:200px;margin:0 auto 20px;height:150px}.company-name{color:#00CED1;font-size:24px;font-weight:600;letter-spacing:2px;margin-bottom:10px}.main-content{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
     </style>
-    
+
     <!-- Preload critical resources -->
     <link rel="preload" href="/assets/styles.css" as="style">
     <link rel="preload" href="/assets/candlefish-logo-150.webp" as="image" type="image/webp">
-    
+
     <!-- Non-critical CSS loaded asynchronously -->
     <link rel="preload" href="/assets/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/assets/styles.css"></noscript>
@@ -27,15 +27,15 @@
         <div class="logo-container">
             <!-- Responsive images with WebP support -->
             <picture>
-                <source type="image/webp" 
+                <source type="image/webp"
                         srcset="/assets/candlefish-logo-150.webp 1x,
                                 /assets/candlefish-logo-300.webp 2x">
-                <source type="image/png" 
+                <source type="image/png"
                         srcset="/assets/candlefish-logo-150.png 1x,
                                 /assets/candlefish-logo-300.png 2x">
-                <img src="/assets/candlefish-logo-150.png" 
-                     alt="Candlefish AI Logo" 
-                     width="150" 
+                <img src="/assets/candlefish-logo-150.png"
+                     alt="Candlefish AI Logo"
+                     width="150"
                      height="150"
                      loading="eager">
             </picture>
@@ -54,9 +54,9 @@
             <h2>Executive Document Access</h2>
             <p>This document contains sensitive business and family information. Please enter the authorization code to proceed.</p>
             <div class="error" id="error" role="alert" aria-live="polite">Invalid authorization code. Please try again.</div>
-            <input type="password" 
-                   id="password" 
-                   placeholder="Enter authorization code" 
+            <input type="password"
+                   id="password"
+                   placeholder="Enter authorization code"
                    autofocus
                    aria-label="Authorization code"
                    autocomplete="off">
@@ -94,19 +94,19 @@
                 setTimeout(() => { error.style.display = 'none'; }, 3000);
             }
         }
-        
+
         // Check authentication on load
         if (sessionStorage.getItem('family-letter-auth') === 'true') {
             window.location.replace('candlefish_update_08032025_family.html');
         }
-        
+
         // Enter key support
         document.getElementById('password').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
         });
-        
+
         // Register service worker for offline support
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

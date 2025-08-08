@@ -156,15 +156,15 @@ button:active {
     .auth-container {
         padding: 30px 20px;
     }
-    
+
     .letterhead {
         padding: 30px 0 20px;
     }
-    
+
     .company-name {
         font-size: 20px;
     }
-    
+
     .main-content {
         padding: 20px 15px;
     }
@@ -175,7 +175,7 @@ button:active {
     .main-content {
         box-shadow: none;
     }
-    
+
     button {
         display: none;
     }

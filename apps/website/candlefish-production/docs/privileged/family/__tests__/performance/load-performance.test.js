@@ -12,7 +12,7 @@ const measureResponseTime = async (requestFunction) => {
     const response = await requestFunction();
     const endTime = process.hrtime.bigint();
     const duration = Number(endTime - startTime) / 1000000; // Convert to milliseconds
-    
+
     return {
         response,
         duration
@@ -29,7 +29,7 @@ describe('Performance Tests', () => {
 
     beforeEach(async () => {
         app = createMockApp();
-        
+
         // Get valid token for authenticated tests
         const loginResponse = await request(app)
             .post('/api/auth/login')
@@ -37,7 +37,7 @@ describe('Performance Tests', () => {
                 email: 'family@candlefish-ai.com',
                 password: 'family-secure-2025'
             });
-        
+
         validToken = loginResponse.body.token;
     });
 
@@ -56,10 +56,10 @@ describe('Performance Tests', () => {
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            
+
             // Authentication should complete within 500ms
             expect(duration).toBeLessThan(500);
-            
+
             console.log(`Login request completed in ${duration.toFixed(2)}ms`);
         });
 
@@ -87,7 +87,7 @@ describe('Performance Tests', () => {
 
             // Should handle concurrent requests efficiently
             expect(totalTime).toBeLessThan(2000); // 2 seconds for all requests
-            
+
             const averageTime = totalTime / concurrentLogins;
             expect(averageTime).toBeLessThan(200); // Average under 200ms per request
 
@@ -116,10 +116,10 @@ describe('Performance Tests', () => {
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            
+
             // Token refresh should be very fast
             expect(duration).toBeLessThan(100);
-            
+
             console.log(`Token refresh completed in ${duration.toFixed(2)}ms`);
         });
 
@@ -134,10 +134,10 @@ describe('Performance Tests', () => {
             );
 
             expect(response.status).toBe(401);
-            
+
             // Failed authentication should still be reasonably fast
             expect(duration).toBeLessThan(300);
-            
+
             console.log(`Failed authentication handled in ${duration.toFixed(2)}ms`);
         });
     });
@@ -152,10 +152,10 @@ describe('Performance Tests', () => {
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            
+
             // Document retrieval should be fast
             expect(duration).toBeLessThan(200);
-            
+
             console.log(`Document retrieval completed in ${duration.toFixed(2)}ms`);
         });
 
@@ -180,7 +180,7 @@ describe('Performance Tests', () => {
 
             // Should handle concurrent document requests efficiently
             expect(totalTime).toBeLessThan(1000); // 1 second for all requests
-            
+
             const averageTime = totalTime / concurrentRequests;
             expect(averageTime).toBeLessThan(50); // Average under 50ms per request
 
@@ -258,7 +258,7 @@ describe('Performance Tests', () => {
                 );
 
                 measurements.push(duration);
-                
+
                 // Add small delay between tests
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
@@ -327,10 +327,10 @@ describe('Performance Tests', () => {
             // This test documents expected behavior for session cleanup
             const sessionLifetime = 2 * 60 * 60 * 1000; // 2 hours
             const cleanupInterval = 15 * 60 * 1000; // 15 minutes
-            
+
             const now = Date.now();
             const expiredThreshold = now - sessionLifetime;
-            
+
             // Simulate session cleanup logic
             const mockSessions = [
                 { id: 'session1', createdAt: now - (3 * 60 * 60 * 1000) }, // 3 hours old - expired
@@ -339,11 +339,11 @@ describe('Performance Tests', () => {
             ];
 
             const startTime = Date.now();
-            
-            const activeSessions = mockSessions.filter(session => 
+
+            const activeSessions = mockSessions.filter(session =>
                 session.createdAt > expiredThreshold
             );
-            
+
             const cleanupTime = Date.now() - startTime;
 
             expect(activeSessions).toHaveLength(1);
@@ -365,24 +365,24 @@ describe('Performance Tests', () => {
                 if (activeConnections >= maxConnections) {
                     throw new Error('Connection pool exhausted');
                 }
-                
+
                 activeConnections++;
-                
+
                 // Simulate query time
                 await new Promise(resolve => setTimeout(resolve, Math.random() * 50));
-                
+
                 activeConnections--;
                 return { success: true };
             };
 
             // Create many concurrent database operations
             const concurrentQueries = 20;
-            const queryPromises = Array(concurrentQueries).fill().map(() => 
+            const queryPromises = Array(concurrentQueries).fill().map(() =>
                 simulateDbQuery().catch(error => ({ error: error.message }))
             );
 
             const results = await Promise.all(queryPromises);
-            
+
             const successfulQueries = results.filter(r => r.success).length;
             const failedQueries = results.filter(r => r.error).length;
 
@@ -405,15 +405,15 @@ describe('Performance Tests', () => {
 
             for (const queryType of queryTypes) {
                 const measurements = [];
-                
+
                 // Measure each query type multiple times
                 for (let i = 0; i < 10; i++) {
                     const startTime = Date.now();
-                    
+
                     // Simulate query with some variance
                     const queryTime = queryType.avgTime + (Math.random() - 0.5) * queryType.variance * 2;
                     await new Promise(resolve => setTimeout(resolve, queryTime));
-                    
+
                     const duration = Date.now() - startTime;
                     measurements.push(duration);
                 }
@@ -444,9 +444,9 @@ describe('Performance Tests', () => {
             ];
 
             const startTime = Date.now();
-            
+
             // Simulate parallel asset loading
-            const assetPromises = assets.map(asset => 
+            const assetPromises = assets.map(asset =>
                 new Promise(resolve => {
                     setTimeout(() => {
                         resolve({
@@ -489,11 +489,11 @@ describe('Performance Tests', () => {
 
             for (const operation of domOperations) {
                 const measurements = [];
-                
+
                 // Measure each DOM operation
                 for (let i = 0; i < 100; i++) {
                     const startTime = process.hrtime.bigint();
-                    
+
                     // Simulate DOM operation
                     await new Promise(resolve => {
                         // Simulate different operation complexities
@@ -505,10 +505,10 @@ describe('Performance Tests', () => {
                             'innerHTML': 5,
                             'appendChild': 4
                         }[operation];
-                        
+
                         setTimeout(resolve, complexity);
                     });
-                    
+
                     const endTime = process.hrtime.bigint();
                     const duration = Number(endTime - startTime) / 1000000; // Convert to ms
                     measurements.push(duration);
@@ -537,22 +537,22 @@ describe('Performance Tests', () => {
 
             for (const condition of networkConditions) {
                 const startTime = Date.now();
-                
+
                 // Simulate network request with latency and bandwidth constraints
                 const payloadSize = 1000; // 1KB
                 const transferTime = (payloadSize / condition.bandwidth) * 1000; // Convert to ms
                 const totalTime = condition.latency + transferTime;
-                
+
                 await new Promise(resolve => setTimeout(resolve, totalTime));
-                
+
                 const actualTime = Date.now() - startTime;
-                
+
                 // Verify simulation accuracy
                 expect(actualTime).toBeGreaterThanOrEqual(totalTime - 10); // Allow small variance
                 expect(actualTime).toBeLessThan(totalTime + 100); // Some overhead
 
                 console.log(`${condition.name}: ${actualTime}ms (expected ~${totalTime}ms)`);
-                
+
                 // Verify acceptable performance even on slow networks
                 if (condition.name === '3g') {
                     expect(actualTime).toBeLessThan(1000); // Should work on 3G within 1s
@@ -575,7 +575,7 @@ describe('Performance Tests', () => {
                 .set('Authorization', `Bearer ${validToken}`);
 
             const responseSize = JSON.stringify(apiResponse.body).length;
-            
+
             // API responses should be mobile-friendly size
             expect(responseSize).toBeLessThan(mobileConstraints.maxRequestSize);
 

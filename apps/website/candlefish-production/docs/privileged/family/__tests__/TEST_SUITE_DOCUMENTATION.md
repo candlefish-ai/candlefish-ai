@@ -272,8 +272,8 @@ npm run test:ci
 
 ### Test Data
 
-- **Valid Credentials**: family@candlefish-ai.com / family-secure-2025
-- **Admin Credentials**: patrick@candlefish-ai.com / admin-test-123
+- **Valid Credentials**: <family@candlefish-ai.com> / family-secure-2025
+- **Admin Credentials**: <patrick@candlefish-ai.com> / admin-test-123
 - **Document ID**: FAM-2025-001
 - **Session Timeout**: 2 hours (configurable for testing)
 
@@ -384,6 +384,7 @@ jobs:
 ### Common Issues
 
 1. **Dependency Installation Failures**
+
    ```bash
    # Clear npm cache and reinstall
    npm cache clean --force
@@ -392,18 +393,21 @@ jobs:
    ```
 
 2. **Playwright Browser Issues**
+
    ```bash
    # Reinstall browsers
    npx playwright install --with-deps
    ```
 
 3. **Port Conflicts**
+
    ```bash
    # Kill processes using test ports
    lsof -ti:3000 | xargs kill -9
    ```
 
 4. **Permission Issues**
+
    ```bash
    # Fix script permissions
    chmod +x run-comprehensive-tests.sh

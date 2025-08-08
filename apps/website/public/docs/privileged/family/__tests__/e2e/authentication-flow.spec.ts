@@ -14,11 +14,11 @@ test.describe('Family Letter Authentication Flow', () => {
     await expect(page.locator('#authForm')).toBeVisible();
     await expect(page.locator('#password')).toBeVisible();
     await expect(page.locator('button')).toContainText('Access Document');
-    
+
     // Check confidential notice
     await expect(page.locator('.confidential-notice'))
       .toContainText('CONFIDENTIAL FAMILY COMMUNICATION');
-    
+
     // Check heading
     await expect(page.locator('h2')).toContainText('Executive Document Access');
   });
@@ -32,9 +32,9 @@ test.describe('Family Letter Authentication Flow', () => {
 
     // Should redirect to family letter
     await expect(page).toHaveURL(/candlefish_update_08032025_family\.html/);
-    
+
     // Verify session storage is set
-    const authValue = await page.evaluate(() => 
+    const authValue = await page.evaluate(() =>
       sessionStorage.getItem('family-letter-auth')
     );
     expect(authValue).toBe('true');
@@ -51,15 +51,15 @@ test.describe('Family Letter Authentication Flow', () => {
     await expect(page.locator('#error')).toBeVisible();
     await expect(page.locator('#error'))
       .toContainText('Invalid authorization code. Please try again.');
-    
+
     // Password field should be cleared
     await expect(page.locator('#password')).toHaveValue('');
-    
+
     // Should remain on login page
     await expect(page).toHaveURL(/index\.html/);
-    
+
     // Session storage should not be set
-    const authValue = await page.evaluate(() => 
+    const authValue = await page.evaluate(() =>
       sessionStorage.getItem('family-letter-auth')
     );
     expect(authValue).toBeNull();
@@ -94,7 +94,7 @@ test.describe('Family Letter Authentication Flow', () => {
   test('should skip login if already authenticated', async ({ page }) => {
     // Set session storage
     await page.goto('/index.html');
-    await page.evaluate(() => 
+    await page.evaluate(() =>
       sessionStorage.setItem('family-letter-auth', 'true')
     );
 
@@ -110,14 +110,14 @@ test.describe('Family Letter Authentication Flow', () => {
 
     // Try multiple wrong passwords
     const attempts = ['wrong1', 'wrong2', 'wrong3'];
-    
+
     for (const attempt of attempts) {
       await page.fill('#password', attempt);
       await page.click('button');
-      
+
       await expect(page.locator('#error')).toBeVisible();
       await expect(page.locator('#password')).toHaveValue('');
-      
+
       // Wait for error to hide before next attempt
       await page.waitForTimeout(3100);
     }
@@ -125,7 +125,7 @@ test.describe('Family Letter Authentication Flow', () => {
     // Finally enter correct password
     await page.fill('#password', 'candlefish');
     await page.click('button');
-    
+
     await expect(page).toHaveURL(/candlefish_update_08032025_family\.html/);
   });
 
@@ -138,7 +138,7 @@ test.describe('Family Letter Authentication Flow', () => {
     // After failed attempt, focus should return
     await page.fill('#password', 'wrong');
     await page.click('button');
-    
+
     // Focus should be maintained
     await expect(page.locator('#password')).toBeFocused();
   });

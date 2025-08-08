@@ -1,8 +1,8 @@
 # Email to Mike McIntosh - Legal Review Request
 
-**To:** Mike McIntosh  
-**From:** Patrick Smith  
-**Date:** August 3, 2025  
+**To:** Mike McIntosh
+**From:** Patrick Smith
+**Date:** August 3, 2025
 **Subject:** Candlefish AI Structure - Legal Review Request
 
 Mike,
@@ -35,21 +35,25 @@ Both documents are available at: [https://candlefish.ai/docs/privileged/family/]
 I'd particularly appreciate your thoughts on:
 
 ### 1. Regulatory Compliance
+
 - Is our interpretation of SEC Rule 204A-1 and FINRA Rule 3210 accurate?
 - Are there additional compliance considerations we should address?
 - Should we be more or less specific about hypothetical timing for employment changes?
 
 ### 2. Corporate Structure
+
 - Does the parent/subsidiary model provide adequate liability protection?
 - Are there tax implications we should consider more carefully?
 - Is the proposed ownership transition mechanism legally sound?
 
 ### 3. Family Governance
+
 - Are the proposed decision-making rights appropriately balanced?
 - Should we consider additional protections for minority family shareholders?
 - Do we need more formal buy-sell provisions?
 
 ### 4. Risk Mitigation
+
 - Is key person insurance sufficient, or should we consider additional protections?
 - Are there other contingencies we should plan for?
 - Should we establish an independent advisory board sooner?

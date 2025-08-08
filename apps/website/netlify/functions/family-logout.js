@@ -50,5 +50,3 @@ exports.handler = async (event, context) => {
 
   return { statusCode: 200, headers: { ...headers, 'Set-Cookie': cookie }, body: JSON.stringify({ ok: true }) };
 };
-
-

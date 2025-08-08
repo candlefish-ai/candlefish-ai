@@ -34,13 +34,13 @@ module.exports = {
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'total-blocking-time': ['error', { maxNumericValue: 300 }],
         'speed-index': ['error', { maxNumericValue: 3000 }],
-        
+
         // Resource size budgets
         'resource-summary:script:size': ['error', { maxNumericValue: 50000 }],
         'resource-summary:stylesheet:size': ['error', { maxNumericValue: 30000 }],
         'resource-summary:image:size': ['error', { maxNumericValue: 200000 }],
         'resource-summary:total:size': ['error', { maxNumericValue: 300000 }],
-        
+
         // Best practices
         'uses-webp-images': 'warn',
         'uses-optimized-images': 'error',
@@ -49,19 +49,19 @@ module.exports = {
         'efficient-animated-content': 'warn',
         'uses-rel-preload': 'warn',
         'uses-rel-preconnect': 'warn',
-        
+
         // Accessibility
         'color-contrast': 'error',
         'document-title': 'error',
         'html-has-lang': 'error',
         'meta-viewport': 'error',
-        
+
         // SEO
         'meta-description': 'warn',
         'crawlable-anchors': 'error',
         'link-text': 'error',
         'is-crawlable': 'error',
-        
+
         // PWA
         'service-worker': 'warn',
         'works-offline': 'warn',

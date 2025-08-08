@@ -6,11 +6,11 @@
 # Check if required tools are installed
 check_dependencies() {
     local missing=()
-    
+
     command -v convert >/dev/null 2>&1 || missing+=("imagemagick")
     command -v cwebp >/dev/null 2>&1 || missing+=("webp")
     command -v pngquant >/dev/null 2>&1 || missing+=("pngquant")
-    
+
     if [ ${#missing[@]} -ne 0 ]; then
         echo "Missing dependencies: ${missing[*]}"
         echo "Install with: brew install ${missing[*]}"
@@ -22,7 +22,7 @@ check_dependencies() {
 mkdir -p assets
 
 # Original image
-ORIGINAL="candlefish_highquality_original.png"
+ORIGINAL="candlefish_original.png"
 
 if [ ! -f "$ORIGINAL" ]; then
     echo "Error: $ORIGINAL not found!"

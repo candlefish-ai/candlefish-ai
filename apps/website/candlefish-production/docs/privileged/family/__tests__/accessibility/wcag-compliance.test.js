@@ -15,11 +15,11 @@ const createDOMEnvironment = (htmlContent) => {
         pretendToBeVisual: true,
         resources: 'usable'
     });
-    
+
     global.window = dom.window;
     global.document = dom.window.document;
     global.navigator = dom.window.navigator;
-    
+
     return dom;
 };
 
@@ -52,10 +52,10 @@ const loginPageHTML = `
 <body>
     <header class="letterhead" role="banner">
         <div class="logo-container">
-            <img 
-                src="./images/candlefish_optimized.webp" 
+            <img
+                src="./images/candlefish_optimized.webp"
                 alt="Candlefish AI Logo - Illuminating Business Intelligence"
-                width="200" 
+                width="200"
                 height="120"
                 decoding="async"
             >
@@ -80,18 +80,18 @@ const loginPageHTML = `
                     All authentication attempts are logged for security purposes.
                 </p>
 
-                <div 
-                    id="errorMessage" 
-                    class="error-message" 
-                    role="alert" 
+                <div
+                    id="errorMessage"
+                    class="error-message"
+                    role="alert"
                     aria-live="assertive"
                     aria-hidden="true"
                 >
                 </div>
 
-                <div 
-                    id="loadingIndicator" 
-                    class="loading-indicator" 
+                <div
+                    id="loadingIndicator"
+                    class="loading-indicator"
                     aria-hidden="true"
                     role="status"
                     aria-label="Authenticating..."
@@ -102,9 +102,9 @@ const loginPageHTML = `
 
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
+                    <input
+                        type="email"
+                        id="email"
                         name="email"
                         class="form-input"
                         placeholder="Enter your email address"
@@ -121,9 +121,9 @@ const loginPageHTML = `
                 <div class="form-group">
                     <label for="password" class="form-label">Authorization Code</label>
                     <div class="password-wrapper">
-                        <input 
-                            type="password" 
-                            id="password" 
+                        <input
+                            type="password"
+                            id="password"
                             name="password"
                             class="form-input"
                             placeholder="Enter authorization code"
@@ -132,9 +132,9 @@ const loginPageHTML = `
                             aria-describedby="password-help"
                             aria-invalid="false"
                         >
-                        <button 
-                            type="button" 
-                            id="togglePassword" 
+                        <button
+                            type="button"
+                            id="togglePassword"
                             class="password-toggle"
                             aria-label="Show password"
                             tabindex="0"
@@ -147,8 +147,8 @@ const loginPageHTML = `
                     </div>
                 </div>
 
-                <button 
-                    type="submit" 
+                <button
+                    type="submit"
                     id="submitButton"
                     class="submit-button"
                     aria-describedby="submit-help"
@@ -233,13 +233,13 @@ const documentViewerHTML = `
                 <span id="userInfo" class="user-info">Family Member (family)</span>
             </div>
         </div>
-        
+
         <div class="letterhead">
             <div class="logo-container">
-                <img 
-                    src="./images/candlefish_optimized.webp" 
+                <img
+                    src="./images/candlefish_optimized.webp"
                     alt="Candlefish AI Logo"
-                    width="150" 
+                    width="150"
                     height="90"
                     decoding="async"
                 >
@@ -288,7 +288,7 @@ const documentViewerHTML = `
         <div class="footer-content">
             <p class="copyright">© 2025 Candlefish AI, LLC. All rights reserved.</p>
             <p class="confidentiality-notice">
-                <strong>CONFIDENTIAL:</strong> This document contains proprietary business information 
+                <strong>CONFIDENTIAL:</strong> This document contains proprietary business information
                 intended solely for authorized family members. Unauthorized distribution is prohibited.
             </p>
             <div class="document-metadata">
@@ -326,9 +326,9 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have proper heading hierarchy', () => {
             const headings = dom.window.document.querySelectorAll('h1, h2, h3, h4, h5, h6');
             const headingLevels = Array.from(headings).map(h => parseInt(h.tagName.charAt(1)));
-            
+
             expect(headingLevels).toEqual([1, 2, 3]); // h1 (company name), h2 (form title), h3 (security info)
-            
+
             // Check heading content
             expect(headings[0].textContent).toBe('CANDLEFISH AI');
             expect(headings[1].textContent).toBe('Executive Document Access');
@@ -338,24 +338,24 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have proper form labels and associations', () => {
             const emailInput = dom.window.document.getElementById('email');
             const passwordInput = dom.window.document.getElementById('password');
-            
+
             // Check label associations
             const emailLabel = dom.window.document.querySelector('label[for="email"]');
             const passwordLabel = dom.window.document.querySelector('label[for="password"]');
-            
+
             expect(emailLabel).toBeTruthy();
             expect(passwordLabel).toBeTruthy();
             expect(emailLabel.textContent).toBe('Email Address');
             expect(passwordLabel.textContent).toBe('Authorization Code');
-            
+
             // Check ARIA associations
             expect(emailInput.getAttribute('aria-describedby')).toBe('email-help');
             expect(passwordInput.getAttribute('aria-describedby')).toBe('password-help');
-            
+
             // Check help text
             const emailHelp = dom.window.document.getElementById('email-help');
             const passwordHelp = dom.window.document.getElementById('password-help');
-            
+
             expect(emailHelp.textContent).toContain('authorized family or business email');
             expect(passwordHelp.textContent).toContain('secure authorization code');
         });
@@ -365,20 +365,20 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             const errorMessage = dom.window.document.getElementById('errorMessage');
             const loadingIndicator = dom.window.document.getElementById('loadingIndicator');
             const confidentialNotice = dom.window.document.querySelector('.confidential-notice');
-            
+
             // Form attributes
             expect(form.getAttribute('role')).toBe('form');
             expect(form.getAttribute('aria-labelledby')).toBe('login-title');
-            
+
             // Error message attributes
             expect(errorMessage.getAttribute('role')).toBe('alert');
             expect(errorMessage.getAttribute('aria-live')).toBe('assertive');
             expect(errorMessage.getAttribute('aria-hidden')).toBe('true');
-            
+
             // Loading indicator attributes
             expect(loadingIndicator.getAttribute('role')).toBe('status');
             expect(loadingIndicator.getAttribute('aria-hidden')).toBe('true');
-            
+
             // Confidential notice attributes
             expect(confidentialNotice.getAttribute('role')).toBe('alert');
             expect(confidentialNotice.getAttribute('aria-live')).toBe('polite');
@@ -388,15 +388,15 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             const focusableElements = dom.window.document.querySelectorAll(
                 'input, button, textarea, select, a[href], [tabindex]:not([tabindex="-1"])'
             );
-            
+
             expect(focusableElements.length).toBeGreaterThan(0);
-            
+
             // Check tab order
             const emailInput = dom.window.document.getElementById('email');
             const passwordInput = dom.window.document.getElementById('password');
             const toggleButton = dom.window.document.getElementById('togglePassword');
             const submitButton = dom.window.document.getElementById('submitButton');
-            
+
             expect(emailInput.tabIndex).toBe(0);
             expect(passwordInput.tabIndex).toBe(0);
             expect(toggleButton.tabIndex).toBe(0);
@@ -406,15 +406,15 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have sufficient color contrast', () => {
             // This test documents expected behavior for color contrast
             // In a real implementation, you would use tools like axe-core to check actual contrast ratios
-            
+
             const form = dom.window.document.getElementById('loginForm');
             const inputs = form.querySelectorAll('input');
             const buttons = form.querySelectorAll('button');
-            
+
             // Verify elements exist for contrast checking
             expect(inputs.length).toBeGreaterThan(0);
             expect(buttons.length).toBeGreaterThan(0);
-            
+
             // In real implementation, would check computed styles:
             // const computedStyle = dom.window.getComputedStyle(element);
             // const backgroundColor = computedStyle.backgroundColor;
@@ -426,25 +426,25 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should handle error states accessibly', () => {
             const emailInput = dom.window.document.getElementById('email');
             const errorMessage = dom.window.document.getElementById('errorMessage');
-            
+
             // Simulate error state
             emailInput.setAttribute('aria-invalid', 'true');
             emailInput.classList.add('error');
             errorMessage.setAttribute('aria-hidden', 'false');
             errorMessage.textContent = 'Please enter a valid email address';
-            
+
             // Create field-specific error
             const fieldError = dom.window.document.createElement('div');
             fieldError.className = 'field-error';
             fieldError.setAttribute('role', 'alert');
             fieldError.textContent = 'Email address is required';
             emailInput.parentNode.appendChild(fieldError);
-            
+
             // Verify error state accessibility
             expect(emailInput.getAttribute('aria-invalid')).toBe('true');
             expect(errorMessage.getAttribute('aria-hidden')).toBe('false');
             expect(fieldError.getAttribute('role')).toBe('alert');
-            
+
             // Check error is announced
             const alerts = dom.window.document.querySelectorAll('[role="alert"]');
             expect(alerts.length).toBeGreaterThan(0);
@@ -453,18 +453,18 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have accessible button labels', () => {
             const submitButton = dom.window.document.getElementById('submitButton');
             const togglePassword = dom.window.document.getElementById('togglePassword');
-            
+
             // Submit button should have descriptive text
             const buttonText = submitButton.querySelector('.button-text');
             expect(buttonText.textContent).toBe('Access Document');
-            
+
             // Toggle button should have aria-label
             expect(togglePassword.getAttribute('aria-label')).toBe('Show password');
-            
+
             // Icons should be hidden from screen readers
             const buttonIcon = submitButton.querySelector('.button-icon');
             const toggleIcon = togglePassword.querySelector('.toggle-icon');
-            
+
             expect(buttonIcon.getAttribute('aria-hidden')).toBe('true');
             expect(toggleIcon.getAttribute('aria-hidden')).toBe('true');
         });
@@ -472,13 +472,13 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should support screen reader announcements', () => {
             const form = dom.window.document.getElementById('loginForm');
             const liveRegions = dom.window.document.querySelectorAll('[aria-live]');
-            
+
             expect(liveRegions.length).toBeGreaterThan(0);
-            
+
             // Check live region politeness levels
             const assertiveRegions = dom.window.document.querySelectorAll('[aria-live="assertive"]');
             const politeRegions = dom.window.document.querySelectorAll('[aria-live="polite"]');
-            
+
             expect(assertiveRegions.length).toBeGreaterThan(0); // Error messages
             expect(politeRegions.length).toBeGreaterThan(0); // Status updates
         });
@@ -487,13 +487,13 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
     describe('Document Viewer Accessibility', () => {
         beforeEach(() => {
             dom = createDOMEnvironment(documentViewerHTML);
-            
+
             // Simulate loaded state
             const loadingScreen = dom.window.document.getElementById('loadingScreen');
             const documentHeader = dom.window.document.getElementById('documentHeader');
             const documentContent = dom.window.document.getElementById('documentContent');
             const documentFooter = dom.window.document.getElementById('documentFooter');
-            
+
             loadingScreen.setAttribute('aria-hidden', 'true');
             documentHeader.setAttribute('aria-hidden', 'false');
             documentContent.setAttribute('aria-hidden', 'false');
@@ -509,11 +509,11 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             const banner = dom.window.document.querySelector('[role="banner"]');
             const main = dom.window.document.querySelector('[role="main"]');
             const contentinfo = dom.window.document.querySelector('[role="contentinfo"]');
-            
+
             expect(banner).toBeTruthy();
             expect(main).toBeTruthy();
             expect(contentinfo).toBeTruthy();
-            
+
             // Check landmark content
             expect(banner.id).toBe('documentHeader');
             expect(main.id).toBe('documentContent');
@@ -523,14 +523,14 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have accessible document structure', () => {
             const article = dom.window.document.querySelector('article');
             const headings = dom.window.document.querySelectorAll('#documentBody h1, #documentBody h2, #documentBody h3');
-            
+
             expect(article).toBeTruthy();
             expect(article.className).toBe('family-letter');
-            
+
             // Check heading hierarchy in document
             const headingLevels = Array.from(headings).map(h => parseInt(h.tagName.charAt(1)));
             expect(headingLevels).toEqual([1, 2, 2]); // h1 (title), h2 (summary), h2 (framework)
-            
+
             // Check heading content
             expect(headings[0].textContent).toBe('Candlefish AI Family Business Structure');
             expect(headings[1].textContent).toBe('Executive Summary');
@@ -542,19 +542,19 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             const downloadButton = dom.window.document.getElementById('downloadButton');
             const shareButton = dom.window.document.getElementById('shareButton');
             const logoutButton = dom.window.document.getElementById('logoutButton');
-            
+
             // Check aria-labels
             expect(printButton.getAttribute('aria-label')).toBe('Print this document');
             expect(downloadButton.getAttribute('aria-label')).toBe('Download document as PDF');
             expect(shareButton.getAttribute('aria-label')).toBe('Share document link');
             expect(logoutButton.getAttribute('aria-label')).toBe('Logout and return to login page');
-            
+
             // Check button content structure
             const buttons = [printButton, downloadButton, shareButton, logoutButton];
             buttons.forEach(button => {
                 const icon = button.querySelector('.button-icon');
                 const text = button.querySelector('.button-text');
-                
+
                 if (icon) {
                     expect(icon.getAttribute('aria-hidden')).toBe('true');
                 }
@@ -564,10 +564,10 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
 
         test('should handle session timer accessibility', () => {
             const sessionTimer = dom.window.document.getElementById('sessionTimer');
-            
+
             expect(sessionTimer.getAttribute('aria-live')).toBe('polite');
             expect(sessionTimer.textContent).toMatch(/Session: \d+:\d{2}:\d{2}/);
-            
+
             // Session timer should update accessibly
             sessionTimer.textContent = 'Session: 1:59:30';
             expect(sessionTimer.textContent).toBe('Session: 1:59:30');
@@ -576,21 +576,21 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should handle loading and error states accessibly', () => {
             const loadingScreen = dom.window.document.getElementById('loadingScreen');
             const errorScreen = dom.window.document.getElementById('errorScreen');
-            
+
             // Loading state
             expect(loadingScreen.getAttribute('role')).toBe('status');
             expect(loadingScreen.getAttribute('aria-label')).toBe('Loading document...');
-            
+
             // Error state
             expect(errorScreen.getAttribute('role')).toBe('alert');
-            
+
             // Simulate error state
             loadingScreen.setAttribute('aria-hidden', 'true');
             errorScreen.setAttribute('aria-hidden', 'false');
-            
+
             const errorMessage = dom.window.document.getElementById('errorMessage');
             errorMessage.textContent = 'Access denied. Please contact administrator.';
-            
+
             expect(errorScreen.getAttribute('aria-hidden')).toBe('false');
             expect(errorMessage.textContent).toContain('Access denied');
         });
@@ -598,14 +598,14 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should support keyboard navigation for document actions', () => {
             const actionButtons = dom.window.document.querySelectorAll('.document-actions button');
             const logoutButton = dom.window.document.getElementById('logoutButton');
-            
+
             // All buttons should be keyboard accessible
             actionButtons.forEach(button => {
                 expect(button.tabIndex).toBe(0);
             });
-            
+
             expect(logoutButton.tabIndex).toBe(0);
-            
+
             // Check button order for logical tab sequence
             const allButtons = dom.window.document.querySelectorAll('button');
             expect(allButtons.length).toBeGreaterThan(0);
@@ -624,15 +624,15 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
                     <button id="logoutNow" class="button-secondary">Logout Now</button>
                 </div>
             `;
-            
+
             dom.window.document.body.appendChild(warningDiv);
-            
+
             expect(warningDiv.getAttribute('role')).toBe('alert');
-            
+
             // Check warning buttons are accessible
             const extendButton = dom.window.document.getElementById('extendSession');
             const logoutNowButton = dom.window.document.getElementById('logoutNow');
-            
+
             expect(extendButton).toBeTruthy();
             expect(logoutNowButton).toBeTruthy();
         });
@@ -644,9 +644,9 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             messageDiv.setAttribute('role', 'status');
             messageDiv.setAttribute('aria-live', 'polite');
             messageDiv.textContent = 'Document link copied to clipboard';
-            
+
             dom.window.document.body.appendChild(messageDiv);
-            
+
             expect(messageDiv.getAttribute('role')).toBe('status');
             expect(messageDiv.getAttribute('aria-live')).toBe('polite');
             expect(messageDiv.textContent).toBe('Document link copied to clipboard');
@@ -655,11 +655,11 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have accessible document metadata', () => {
             const metadata = dom.window.document.querySelector('.document-metadata');
             const lastUpdated = dom.window.document.getElementById('lastUpdated');
-            
+
             expect(metadata).toBeTruthy();
             expect(lastUpdated).toBeTruthy();
             expect(lastUpdated.textContent).toBe('Last Updated: August 3, 2025');
-            
+
             // Metadata should be in footer for proper structure
             const footer = dom.window.document.querySelector('footer');
             expect(footer.contains(metadata)).toBe(true);
@@ -669,20 +669,20 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
     describe('Responsive Design Accessibility', () => {
         test('should maintain accessibility at mobile viewport', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             // Simulate mobile viewport
             Object.defineProperty(dom.window, 'innerWidth', { value: 375, writable: true });
             Object.defineProperty(dom.window, 'innerHeight', { value: 667, writable: true });
-            
+
             // Check that essential elements are still accessible
             const form = dom.window.document.getElementById('loginForm');
             const inputs = form.querySelectorAll('input');
             const buttons = form.querySelectorAll('button');
-            
+
             expect(form).toBeTruthy();
             expect(inputs.length).toBeGreaterThan(0);
             expect(buttons.length).toBeGreaterThan(0);
-            
+
             // Form should still have proper ARIA attributes
             expect(form.getAttribute('role')).toBe('form');
             expect(form.getAttribute('aria-labelledby')).toBe('login-title');
@@ -690,15 +690,15 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
 
         test('should handle touch interactions accessibly', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             const toggleButton = dom.window.document.getElementById('togglePassword');
             const submitButton = dom.window.document.getElementById('submitButton');
-            
+
             // Buttons should have sufficient touch target size (44x44px minimum)
             // This would be checked with computed styles in real implementation
             expect(toggleButton).toBeTruthy();
             expect(submitButton).toBeTruthy();
-            
+
             // Touch targets should still be keyboard accessible
             expect(toggleButton.tabIndex).toBe(0);
             expect(submitButton.tabIndex).toBe(0);
@@ -706,17 +706,17 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
 
         test('should support zoom up to 200% without horizontal scrolling', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             // Simulate 200% zoom
             Object.defineProperty(dom.window, 'devicePixelRatio', { value: 2, writable: true });
-            
+
             // Content should still be accessible
             const form = dom.window.document.getElementById('loginForm');
             const title = dom.window.document.getElementById('login-title');
-            
+
             expect(form).toBeTruthy();
             expect(title.textContent).toBe('Executive Document Access');
-            
+
             // Text should still be readable
             expect(title.textContent.length).toBeGreaterThan(0);
         });
@@ -726,7 +726,7 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should provide meaningful page titles', () => {
             dom = createDOMEnvironment(loginPageHTML);
             const title = dom.window.document.title;
-            
+
             expect(title).toBe('Candlefish AI - Secure Executive Access');
             expect(title).toContain('Candlefish AI');
             expect(title).toContain('Secure');
@@ -735,31 +735,31 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should have proper language attributes', () => {
             dom = createDOMEnvironment(loginPageHTML);
             const html = dom.window.document.documentElement;
-            
+
             expect(html.getAttribute('lang')).toBe('en');
         });
 
         test('should provide alternative text for images', () => {
             dom = createDOMEnvironment(loginPageHTML);
             const logo = dom.window.document.querySelector('img');
-            
+
             expect(logo.getAttribute('alt')).toBe('Candlefish AI Logo - Illuminating Business Intelligence');
             expect(logo.getAttribute('alt')).not.toBe('');
         });
 
         test('should use semantic HTML elements', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             const header = dom.window.document.querySelector('header');
             const main = dom.window.document.querySelector('main');
             const footer = dom.window.document.querySelector('footer');
             const form = dom.window.document.querySelector('form');
-            
+
             expect(header).toBeTruthy();
             expect(main).toBeTruthy();
             expect(footer).toBeTruthy();
             expect(form).toBeTruthy();
-            
+
             // Check roles are implicit or explicit
             expect(header.getAttribute('role') || 'banner').toBe('banner');
             expect(main.getAttribute('role') || 'main').toBe('main');
@@ -770,17 +770,17 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
         test('should provide skip links for navigation', () => {
             // This test documents expected behavior for skip links
             // In a real implementation, you would add skip links
-            
+
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             // Skip links should be added for better navigation
             const skipLink = dom.window.document.createElement('a');
             skipLink.href = '#main-content';
             skipLink.textContent = 'Skip to main content';
             skipLink.className = 'skip-link';
-            
+
             dom.window.document.body.insertBefore(skipLink, dom.window.document.body.firstChild);
-            
+
             expect(skipLink.textContent).toBe('Skip to main content');
             expect(skipLink.href).toContain('#main-content');
         });
@@ -789,14 +789,14 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
     describe('WCAG 2.1 Success Criteria Compliance', () => {
         test('should meet Level A criteria', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             // 1.1.1 Non-text Content
             const images = dom.window.document.querySelectorAll('img');
             images.forEach(img => {
                 expect(img.getAttribute('alt')).toBeDefined();
                 expect(img.getAttribute('alt')).not.toBe('');
             });
-            
+
             // 1.3.1 Info and Relationships
             const labels = dom.window.document.querySelectorAll('label');
             labels.forEach(label => {
@@ -806,7 +806,7 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
                     expect(associatedInput).toBeTruthy();
                 }
             });
-            
+
             // 2.1.1 Keyboard accessible
             const interactiveElements = dom.window.document.querySelectorAll('button, input, a, [tabindex]');
             interactiveElements.forEach(element => {
@@ -814,7 +814,7 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
                     expect(element.tabIndex).toBeGreaterThanOrEqual(0);
                 }
             });
-            
+
             // 2.4.1 Bypass Blocks (would need skip links in real implementation)
             // 2.4.2 Page Titled
             expect(dom.window.document.title).toBeTruthy();
@@ -823,7 +823,7 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
 
         test('should meet Level AA criteria', () => {
             dom = createDOMEnvironment(loginPageHTML);
-            
+
             // 1.4.3 Contrast (would need actual color calculations in real implementation)
             // 1.4.4 Resize text (text should be resizable up to 200%)
             // 2.4.6 Headings and Labels
@@ -831,12 +831,12 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
             headings.forEach(heading => {
                 expect(heading.textContent.trim().length).toBeGreaterThan(0);
             });
-            
+
             const labels = dom.window.document.querySelectorAll('label');
             labels.forEach(label => {
                 expect(label.textContent.trim().length).toBeGreaterThan(0);
             });
-            
+
             // 2.4.7 Focus Visible (would need visual testing in real implementation)
             // 3.1.2 Language of Parts
             expect(dom.window.document.documentElement.getAttribute('lang')).toBe('en');
@@ -844,19 +844,19 @@ describe('WCAG 2.1 AA Compliance Tests', () => {
 
         test('should implement ARIA best practices', () => {
             dom = createDOMEnvironment(documentViewerHTML);
-            
+
             // ARIA landmarks
             const landmarks = dom.window.document.querySelectorAll('[role="banner"], [role="main"], [role="contentinfo"]');
             expect(landmarks.length).toBeGreaterThanOrEqual(3);
-            
+
             // ARIA live regions
             const liveRegions = dom.window.document.querySelectorAll('[aria-live]');
             expect(liveRegions.length).toBeGreaterThan(0);
-            
+
             // ARIA labels and descriptions
             const labeledElements = dom.window.document.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby]');
             expect(labeledElements.length).toBeGreaterThan(0);
-            
+
             // ARIA states
             const hiddenElements = dom.window.document.querySelectorAll('[aria-hidden]');
             hiddenElements.forEach(element => {

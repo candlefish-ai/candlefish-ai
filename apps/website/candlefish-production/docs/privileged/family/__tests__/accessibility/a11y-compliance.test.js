@@ -20,7 +20,7 @@ describe('Family Letter Accessibility', () => {
       <body>
         <div class="letterhead">
           <div class="logo-container">
-            <img src="candlefish_highquality_original.png" alt="Candlefish AI Logo">
+            <img src="candlefish_original.png" alt="Candlefish AI Logo">
           </div>
           <div class="company-info">
             <div class="company-name">CANDLEFISH AI</div>
@@ -39,11 +39,11 @@ describe('Family Letter Accessibility', () => {
               Invalid authorization code. Please try again.
             </div>
             <label for="password" class="sr-only">Authorization Code</label>
-            <input 
-              type="password" 
-              id="password" 
+            <input
+              type="password"
+              id="password"
               name="password"
-              placeholder="Enter authorization code" 
+              placeholder="Enter authorization code"
               autofocus
               required
               aria-describedby="password-help error"
@@ -71,9 +71,9 @@ describe('Family Letter Accessibility', () => {
 
     test('should have proper heading structure', () => {
       const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-      
+
       expect(headings.length).toBeGreaterThan(0);
-      
+
       // Should have logical heading hierarchy
       const h2 = document.querySelector('h2');
       expect(h2).toBeInTheDocument();
@@ -83,7 +83,7 @@ describe('Family Letter Accessibility', () => {
     test('should have proper form labels', () => {
       const passwordInput = document.getElementById('password');
       const label = document.querySelector('label[for="password"]');
-      
+
       expect(label).toBeInTheDocument();
       expect(passwordInput.hasAttribute('aria-describedby')).toBe(true);
     });
@@ -102,31 +102,31 @@ describe('Family Letter Accessibility', () => {
   describe('Screen Reader Support', () => {
     test('should have proper ARIA labels', () => {
       const errorElement = document.getElementById('error');
-      
+
       expect(errorElement.getAttribute('role')).toBe('alert');
       expect(errorElement.getAttribute('aria-live')).toBe('polite');
     });
 
     test('should have descriptive alt text for images', () => {
       const logo = document.querySelector('img');
-      
+
       expect(logo.getAttribute('alt')).toBe('Candlefish AI Logo');
       expect(logo.getAttribute('alt')).not.toBe('');
     });
 
     test('should have screen reader only text for context', () => {
       const helpText = document.getElementById('password-help');
-      
+
       expect(helpText).toBeInTheDocument();
       expect(helpText).toHaveClass('sr-only');
     });
 
     test('should announce errors properly', () => {
       const errorElement = document.getElementById('error');
-      
+
       // Simulate showing error
       errorElement.style.display = 'block';
-      
+
       expect(errorElement.getAttribute('aria-live')).toBe('polite');
       expect(errorElement.getAttribute('role')).toBe('alert');
     });
@@ -137,9 +137,9 @@ describe('Family Letter Accessibility', () => {
       const focusableElements = document.querySelectorAll(
         'input, button, [tabindex]:not([tabindex="-1"])'
       );
-      
+
       expect(focusableElements.length).toBeGreaterThan(0);
-      
+
       // Password input should be first
       expect(focusableElements[0].id).toBe('password');
       expect(focusableElements[1].tagName.toLowerCase()).toBe('button');
@@ -148,11 +148,11 @@ describe('Family Letter Accessibility', () => {
     test('should have visible focus indicators', () => {
       const passwordInput = document.getElementById('password');
       const button = document.querySelector('button');
-      
+
       // Elements should be focusable
       passwordInput.focus();
       expect(document.activeElement).toBe(passwordInput);
-      
+
       button.focus();
       expect(document.activeElement).toBe(button);
     });
@@ -160,27 +160,27 @@ describe('Family Letter Accessibility', () => {
     test('should support Enter key submission', () => {
       const passwordInput = document.getElementById('password');
       let enterPressed = false;
-      
+
       passwordInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           enterPressed = true;
         }
       });
-      
+
       const enterEvent = new KeyboardEvent('keypress', { key: 'Enter' });
       passwordInput.dispatchEvent(enterEvent);
-      
+
       expect(enterPressed).toBe(true);
     });
 
     test('should not trap focus inappropriately', () => {
       const passwordInput = document.getElementById('password');
       const button = document.querySelector('button');
-      
+
       // Should be able to tab between elements
       passwordInput.focus();
       expect(document.activeElement).toBe(passwordInput);
-      
+
       // Simulate tab
       button.focus();
       expect(document.activeElement).toBe(button);
@@ -190,10 +190,10 @@ describe('Family Letter Accessibility', () => {
   describe('Color and Contrast', () => {
     test('should not rely solely on color for information', () => {
       const errorElement = document.getElementById('error');
-      
+
       // Error should have text content, not just color
       expect(errorElement.textContent.trim()).toBeTruthy();
-      
+
       // Should have proper role for non-visual users
       expect(errorElement.getAttribute('role')).toBe('alert');
     });
@@ -209,7 +209,7 @@ describe('Family Letter Accessibility', () => {
   describe('Mobile Accessibility', () => {
     test('should have proper viewport meta tag', () => {
       const viewportMeta = document.querySelector('meta[name="viewport"]');
-      
+
       expect(viewportMeta).toBeInTheDocument();
       expect(viewportMeta.getAttribute('content'))
         .toContain('width=device-width, initial-scale=1.0');
@@ -218,7 +218,7 @@ describe('Family Letter Accessibility', () => {
     test('should have adequate touch targets', () => {
       const button = document.querySelector('button');
       const input = document.getElementById('password');
-      
+
       // Elements should exist and be interactive
       expect(button).toBeInTheDocument();
       expect(input).toBeInTheDocument();
@@ -228,7 +228,7 @@ describe('Family Letter Accessibility', () => {
   describe('Form Accessibility', () => {
     test('should have proper form structure', () => {
       const input = document.getElementById('password');
-      
+
       expect(input.getAttribute('type')).toBe('password');
       expect(input.hasAttribute('required')).toBe(true);
       expect(input.getAttribute('name')).toBe('password');
@@ -236,7 +236,7 @@ describe('Family Letter Accessibility', () => {
 
     test('should provide clear instructions', () => {
       const instruction = document.querySelector('p');
-      
+
       expect(instruction.textContent)
         .toContain('enter the authorization code');
     });
@@ -244,7 +244,7 @@ describe('Family Letter Accessibility', () => {
     test('should handle form validation accessibly', () => {
       const input = document.getElementById('password');
       const errorElement = document.getElementById('error');
-      
+
       // Error should be associated with input
       expect(input.getAttribute('aria-describedby'))
         .toContain('error');
@@ -254,23 +254,23 @@ describe('Family Letter Accessibility', () => {
   describe('Dynamic Content Accessibility', () => {
     test('should announce dynamic changes', () => {
       const errorElement = document.getElementById('error');
-      
+
       // Initially hidden
       expect(errorElement.style.display).toBe('none');
-      
+
       // When shown, should be announced
       errorElement.style.display = 'block';
-      
+
       expect(errorElement.getAttribute('aria-live')).toBe('polite');
     });
 
     test('should handle loading states accessibly', () => {
       const button = document.querySelector('button');
-      
+
       // Could add aria-busy during authentication
       button.setAttribute('aria-busy', 'true');
       button.textContent = 'Authenticating...';
-      
+
       expect(button.getAttribute('aria-busy')).toBe('true');
     });
   });
