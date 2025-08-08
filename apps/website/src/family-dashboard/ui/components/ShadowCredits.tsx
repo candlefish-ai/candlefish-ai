@@ -3,13 +3,19 @@ import { Card } from './Card'
 
 type CreditRow = { person: string; hours: number; rate: number; quarter: string }
 
-const sample: CreditRow[] = [
-  { person: 'Tyler', hours: 42, rate: 150, quarter: 'Q3 2025' },
-  { person: 'Trevor', hours: 28, rate: 125, quarter: 'Q3 2025' },
-  { person: 'Kendall', hours: 18, rate: 100, quarter: 'Q3 2025' },
-]
-
 export function ShadowCredits(): JSX.Element {
+  const [rows, setRows] = React.useState<CreditRow[]>([])
+  const [loaded, setLoaded] = React.useState(false)
+
+  React.useEffect(() => {
+    fetch('/.netlify/functions/family-data', { credentials: 'include' })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data && Array.isArray(data.credits)) setRows(data.credits)
+      })
+      .finally(() => setLoaded(true))
+  }, [])
+
   return (
     <section id="credits" aria-label="Shadow credits" className="space-y-4">
       <h2 className="text-2xl font-medium">Shadow Credits</h2>
@@ -25,7 +31,7 @@ export function ShadowCredits(): JSX.Element {
             </tr>
           </thead>
           <tbody>
-            {sample.map((row, idx) => {
+            {(rows.length ? rows : loaded ? [] : [{ person: 'Loading…', hours: 0, rate: 0, quarter: '' } as CreditRow]).map((row, idx) => {
               const value = row.hours * row.rate
               return (
                 <tr key={row.person + idx} className="odd:bg-white/0 even:bg-white/[0.02]">

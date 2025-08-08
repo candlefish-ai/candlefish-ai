@@ -45,37 +45,36 @@ exports.handler = async (event, context) => {
 
   try {
     const { code } = JSON.parse(event.body || '{}');
-    const expected = process.env.FAMILY_AUTH_CODE;
+    const expected = process.env.FAMILY_AUTH_CODE || '';
 
-    if (!expected) {
-      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Auth not configured' }) };
-    }
-
-    const ok = typeof code === 'string' && code.length > 0 && timingSafeEqual(code, expected);
-    if (!ok) {
+    // Accept either (a) correct passcode, or (b) authenticated Netlify Identity user
+    const identityUser = getIdentityUser(event, context);
+    const passcodeOk = expected && typeof code === 'string' && code.length > 0 && timingSafeEqual(code, expected);
+    const identityOk = !!identityUser;
+    if (!passcodeOk && !identityOk) {
       return { statusCode: 401, headers, body: JSON.stringify({ ok: false }) };
     }
 
-    // Create signed token for HttpOnly cookie validation at the Edge
-    const signingKey = process.env.FAMILY_AUTH_SIGNING_KEY || expected;
-    const maxAgeSeconds = Number(process.env.FAMILY_AUTH_MAX_AGE_SECONDS || 6 * 60 * 60); // default 6h
-    const exp = Math.floor(Date.now() / 1000) + maxAgeSeconds;
-    const payload = base64urlEncode(JSON.stringify({ exp }));
-    const sig = hmacSha256Base64Url(signingKey, payload);
-    const cookieValue = `${payload}.${sig}`;
+    // Issue RS256 JWT using private key from AWS Secrets Manager
+    const { token, kid, exp } = await issueJwtRs256({
+      iss: 'https://candlefish.ai',
+      aud: 'candlefish-family',
+      sub: identityOk ? 'identity-user' : 'passcode-user',
+      ttlSeconds: Number(process.env.FAMILY_AUTH_MAX_AGE_SECONDS || 6 * 60 * 60),
+    });
 
     const cookie = [
-      `cf_family_auth=${cookieValue}`,
+      `cf_family_auth=${token}`,
       `Path=/docs/privileged/family`,
       `HttpOnly`,
       `Secure`,
       `SameSite=Strict`,
-      `Max-Age=${maxAgeSeconds}`,
+      `Max-Age=${Math.max(0, exp - Math.floor(Date.now()/1000))}`,
     ].join('; ');
 
     const respHeaders = { ...headers, 'Set-Cookie': cookie };
 
-    return { statusCode: 200, headers: respHeaders, body: JSON.stringify({ ok: true }) };
+    return { statusCode: 200, headers: respHeaders, body: JSON.stringify({ ok: true, kid }) };
   } catch (e) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid request' }) };
   }
@@ -116,9 +115,42 @@ function base64urlEncode(str) {
     .replace(/\//g, '_');
 }
 
-function hmacSha256Base64Url(secret, message) {
-  const sig = crypto.createHmac('sha256', String(secret)).update(String(message)).digest('base64');
-  return sig.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+async function issueJwtRs256({ iss, aud, sub, ttlSeconds }) {
+  const region = process.env.AWS_REGION || 'us-east-1';
+  const env = process.env.CF_ENV || process.env.NODE_ENV || 'production';
+  const secretName = process.env.JWT_SECRET_NAME || `candlefish-jwt-keys-${env}`;
+  const { SecretsManagerClient, GetSecretValueCommand } = await import('@aws-sdk/client-secrets-manager');
+  const sm = new SecretsManagerClient({ region });
+  const out = await sm.send(new GetSecretValueCommand({ SecretId: secretName }));
+  const data = JSON.parse(out.SecretString || '{}');
+  if (!data.privateKey || !data.keyId) {
+    throw new Error('JWT secret invalid');
+  }
+
+  const header = { alg: 'RS256', typ: 'JWT', kid: data.keyId };
+  const iat = Math.floor(Date.now()/1000);
+  const exp = iat + Number(ttlSeconds || 21600);
+  const payload = { iss, aud, sub, iat, exp };
+
+  const enc = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64').replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+  const signingInput = `${enc(header)}.${enc(payload)}`;
+  const sign = crypto.createSign('RSA-SHA256');
+  sign.update(signingInput);
+  sign.end();
+  const signature = sign.sign(data.privateKey).toString('base64').replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+  return { token: `${signingInput}.${signature}`, kid: data.keyId, exp };
+}
+
+function getIdentityUser(event, context){
+  // Netlify provides identity context in either event.clientContext or context.clientContext
+  const cc = event.clientContext || context.clientContext || {};
+  if (cc.user) return cc.user;
+  // If using nf_jwt cookie or Authorization header, presence implies an authenticated user
+  const auth = (event.headers.authorization || event.headers.Authorization || '').trim();
+  if (auth.startsWith('Bearer ')) return { token: auth.slice(7) };
+  const cookie = event.headers.cookie || '';
+  if (/nf_jwt=/.test(cookie)) return { token: 'nf_jwt' };
+  return null;
 }
 
 

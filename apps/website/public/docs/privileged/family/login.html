@@ -31,7 +31,15 @@
       const btn = document.getElementById('login');
       btn.onclick = () => window.netlifyIdentity && window.netlifyIdentity.open('login');
       if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('login', (user) => {
+        window.netlifyIdentity.on('login', async (user) => {
+          try {
+            // Mint HttpOnly cookie for Edge gate using identity session
+            await fetch('/.netlify/functions/family-auth', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({})
+            });
+          } catch (e) { /* non-fatal */ }
           window.location.href = '/docs/privileged/family/';
         });
       }
