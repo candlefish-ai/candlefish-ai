@@ -6,5 +6,8 @@
     "apps/analytics-dashboard/public/logo",
     "apps/brand-portal/public/logo",
     "public/logo"
-  ]
+  ],
+  "meta": {
+    "ciTrigger": "2025-08-11T18:34:57.604Z"
+  }
 }
