@@ -1,5 +1,5 @@
 # Real-time Performance Monitoring API Dockerfile
-FROM python:3.11-slim as base
+FROM python:3.12-slim as base
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
