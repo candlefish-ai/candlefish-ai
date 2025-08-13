@@ -1,5 +1,5 @@
 # Multi-stage build for React Native Mobile App
-FROM node:20-buster AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 
 # Install system dependencies for React Native

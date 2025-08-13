@@ -2,7 +2,7 @@
 # Security hardened, performance optimized, minimal attack surface
 
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 # Install security updates
 RUN apk update && apk upgrade && apk add --no-cache \
@@ -43,7 +43,7 @@ RUN npm prune --production
 RUN rm -rf .git .github docs *.md
 
 # Production stage
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 
 # Install security updates and runtime dependencies
 RUN apk update && apk upgrade && apk add --no-cache \
