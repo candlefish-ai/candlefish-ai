@@ -98,12 +98,8 @@
   path = "/api/edge/*"
   function = "api-edge"
 
-# Redirects
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
+# Note: Next.js App Router API routes are handled automatically by @netlify/plugin-nextjs
+# No manual redirects needed for /api/* routes
 
 # Performance optimizations
 [functions]
