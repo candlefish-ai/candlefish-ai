@@ -4,8 +4,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Only use static export for production builds
-  ...(process.env.NODE_ENV === 'production' && {
+  // Conditional static export - only for STATIC_EXPORT builds, not Netlify
+  ...(process.env.STATIC_EXPORT === 'true' && {
     output: 'export',
     trailingSlash: true,
     distDir: 'out',
